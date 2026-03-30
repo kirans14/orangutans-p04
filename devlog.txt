@@ -1,4 +1,4 @@
-kiranS -- 2026-03-29 11:45
+kiranS -- 2026-03-29 23:45
 INITIAL DD REVIEW
 - Clarified certain dependencies and tasks
 - Added API call limit
@@ -7,3 +7,9 @@ INITIAL DD REVIEW
 
 Yu Lu -- 2026-03-30 10:30
 -- Added inital codebase setup
+
+kiranS -- 2026-03-30 11:00
+- Created Piazza clearance request for Steam API
+
+kiranS -- 2026-03-30 3:45
+- Added flask method for displaying homepage --> app is functioning locally

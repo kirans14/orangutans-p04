@@ -1,5 +1,5 @@
-#Kyle Liu, Yu Lu, Emily Mai, Jun Jie Li
-#whospm
+#Kiran Soemardjo, Mustafa Abdullah, Yu Lu, Eviss Wu
+#Orangutans
 
 # Imports >>
 from flask import Flask, render_template, request, flash, url_for, redirect, session
@@ -27,8 +27,12 @@ def user_context(): # persistent info made avalible for all html templates
 
 # ROUTING BEGINS >>
 
+@app.route("/")
+def home_get():
+    return render_template("home.html")
+
 @app.route("/chart", methods=['GET', 'POST'])
-def homepage():
+def chart_get():
     flash("Welcome to Organituanas!!")
     return render_template("chart.html")
 
