@@ -27,7 +27,7 @@ def user_context(): # persistent info made avalible for all html templates
 
 # ROUTING BEGINS >>
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/chart", methods=['GET', 'POST'])
 def homepage():
     flash("Welcome to Organituanas!!")
     return render_template("chart.html")
