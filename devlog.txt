@@ -4,3 +4,6 @@ INITIAL DD REVIEW
 - Added API call limit
 - Eliminated username and pswd fields from users table and replaced w/ api_key
 - Will decide how db filling will function in class on Monday (i.e., whether dataset pulls will be one-time or periodic)
+
+Yu Lu -- 2026-03-30 10:30
+-- Added inital codebase setup
