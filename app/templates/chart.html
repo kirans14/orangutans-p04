@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<!--
+  Pizza Time // whospm
+  Roster: Yu L, Kyle L, Emily M, Jun Jie L
+  SoftDev
+ -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pizza Time</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen flex flex-col">
+  <canvas id = "chart"></canvas>
+</body>
+
+  <main class="flex-1 max-w-6xl mx-auto w-full px-6 py-10">
+    <h2> hi </h2>
+  </main>
+
+  <footer class="mt-12 py-6 text-center text-sm text-gray-500">
+    <a href="/" class="hover:text-orange-500 transition">
+      ↑ Go to top
+    </a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+  const ctx = document.getElementById('chart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+  </script>
+</body>
+</html>
