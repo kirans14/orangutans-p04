@@ -1,0 +1,6 @@
+kiranS -- 2026-03-29 11:45
+INITIAL DD REVIEW
+- Clarified certain dependencies and tasks
+- Added API call limit
+- Eliminated username and pswd fields from users table and replaced w/ api_key
+- Will decide how db filling will function in class on Monday (i.e., whether dataset pulls will be one-time or periodic)
