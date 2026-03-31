@@ -11,5 +11,9 @@ Yu Lu -- 2026-03-30 10:30
 kiranS -- 2026-03-30 11:00
 - Created Piazza clearance request for Steam API
 
-kiranS -- 2026-03-30 3:45
+kiranS -- 2026-03-30 15:45
 - Added flask method for displaying homepage --> app is functioning locally
+
+kiranS -- 2026-03-21 16:15
+- Got app working remotely
+- Updated README.md to include site link

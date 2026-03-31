@@ -17,10 +17,9 @@ Frontend visuals with Bootstrap, Jinja in HTML templates, and page routing<br>
 ## Description:
 We plan to pull data from the Steam API, and use the data to visualize trends in the games that are popular at the moment. The data will also be filterable/sortable by rating, player count, genre, tag, etc. Additionally, the user will be able to enter their Steam ID, and get recommendations based on the games in their library, as well as an analysis of personal trends (through the Steam API using the user’s ID).
 
+#### Visit our live site at [http://192.81.214.53:1000/](http://192.81.214.53:1000/)
+
 ## Install Guide:
-
-
-# Install Guide:
 >1) Git clone this repo through ssh (`git@github.com:kirans14/orangutans-p04.git`) onto local computer in an accessible location
 >2) Navigate into cloned Repo [`cd orangutans-p04/`]. Then navigate into `app` directory [`cd app`]
 
