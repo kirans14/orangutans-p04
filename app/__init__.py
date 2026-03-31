@@ -37,5 +37,4 @@ def chart_get():
     return render_template("chart.html")
 
 if __name__ == "__main__":
-    app.debug = True
     app.run()
