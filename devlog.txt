@@ -17,3 +17,8 @@ kiranS -- 2026-03-30 15:45
 kiranS -- 2026-03-21 16:15
 - Got app working remotely
 - Updated README.md to include site link
+
+Yu Lu -- 2026-3-31 20:00
+- Added requirements txt
+- cleanup for homepage template and added a css file that has steam-themed colors for color scheme for now
+- added some more steam related images in static file, maybe move over to cloud later?
