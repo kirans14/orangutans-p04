@@ -28,7 +28,7 @@ def user_context(): # persistent info made avalible for all html templates
 
 # ROUTING BEGINS >>
 
-@app.route("/")
+@app.get("/")
 def home_get():
     return render_template("home.html")
 
@@ -37,6 +37,16 @@ def chart_get():
     with open("static/data/tempdata.json", "r") as f:
         data = json.load(f)
     return render_template("chart.html", data=data)
+
+@app.get("/steam_id")
+def id_get():
+    return render_template("id.html")
+
+@app.post("/steam_id")
+def id_post():
+    steam_id = request.args["id"]
+    session["id"] = steam_id
+    return render_template("id.html", id=steam_id)
 
 if __name__ == "__main__":
     app.run(debug=True)
