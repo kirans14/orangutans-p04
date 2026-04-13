@@ -29,9 +29,8 @@ new Chart(ctx, {
 });
 
 var tagCount = gameTags.flat();
-var tag = [...new Set(tagCount)]; // set slice to reduce amount
+var tag = [...new Set(tagCount)].slice(0,10); // set slice to reduce amount
 const rtx = document.getElementById('chart2');
-
 const tagData = {
   labels: tag,
   datasets: [{
@@ -63,12 +62,18 @@ const tagConfig = {
 new Chart(rtx, tagConfig);
 
 
-var langCount = gameLanguages;
+var langCount = [... gameLanguages].flatMap(i => i.split(","));
+// console.log(langCount);
 var lang = [...new Set(langCount)];
 const rtx2 = document.getElementById("chart3");
+var resultStr;
+console.log("HELLO.")
+console.log(langCount);
+console.log(lang);
+// console.log(lang.map(l => langCount.filter(lc => lc == l).length));
 
 const langData = {
-  labels: language,
+  labels: lang,
   datasets: [{
     label: 'Count',
     data: lang.map(l => langCount.filter(lc => lc == l).length),
@@ -96,3 +101,8 @@ const langConfig = {
 };
 
 new Chart(rtx2, langConfig);
+
+
+const button = document.getElementById("btn");
+const sliceAmt = document.getElementById("amt");
+button.addEventListener("click", )

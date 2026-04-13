@@ -11,7 +11,7 @@ from urllib.request import Request, urlopen
 import pprint
 import os
 import re
-import fetcher
+# import fetcher
 
 # Initialize DB >>
 
