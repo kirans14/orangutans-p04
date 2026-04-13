@@ -8,7 +8,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pizza Time</title>
+  <title>chart test</title>
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -16,19 +16,24 @@
 
 <body class="min-h-screen flex flex-col">
   <canvas id = "chart"></canvas>
-</body>
+  <canvas id = "chart2"></canvas>
+  <canvas id ="chart3"></canvas>
 
   <main class="flex-1 max-w-6xl mx-auto w-full px-6 py-10">
-    <h2> hi </h2>
+    <h2 id = "tester"></h2>
   </main>
 
   <footer class="mt-12 py-6 text-center text-sm text-gray-500">
-    <a href="/" class="hover:text-orange-500 transition">
+    <a href="/chart" class="hover:text-orange-500 transition">
       ↑ Go to top
     </a>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="{{url_for('static', filename='js/hompage.js')}}"> </script>
+  <script>
+  const steamData = {{ data | tojson }};
+  </script>
+  <script src="{{url_for('static', filename='js/chart.js')}}"> </script>
 </body>
+
 </html>

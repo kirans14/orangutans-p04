@@ -11,6 +11,7 @@ from urllib.request import Request, urlopen
 import pprint
 import os
 import re
+import fetcher
 
 # Initialize DB >>
 
@@ -33,8 +34,9 @@ def home_get():
 
 @app.route("/chart", methods=['GET', 'POST'])
 def chart_get():
-    flash("Welcome to Organituanas!!")
-    return render_template("chart.html")
+    with open("static/data/tempdata.json", "r") as f:
+        data = json.load(f)
+    return render_template("chart.html", data=data)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
