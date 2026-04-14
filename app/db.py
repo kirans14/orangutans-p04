@@ -30,7 +30,7 @@ def insert_query(table, data):
     row = c.fetchall()
     output = dict()
     for col in range(len(row[0])):
-        output.update({c.description[col][0]: row[0][col]}) 
+        output.update({c.description[col][0]: row[0][col]})
     c.close()
     db.commit()
     return output

@@ -1,18 +1,20 @@
 const gamesArray = Object.values(steamData);
-const gameTags = gamesArray.map(game => Object.keys(game.tags).slice(0,5)); 
+const gameTags = gamesArray.map(game => Object.keys(game.tags).slice(0,5));
 const gameLanguages = gamesArray.map(game => game.languages);
 const topAverage = [...gamesArray].sort((a, b) => b.average_forever - a.average_forever).slice(0, 30);
 
 
 // Fun recommendations
-const mostEngaging = [...gamesArray].sort((a, b) => b.positive - a.positive).slice(100,500);
+const mostEngaging = [...gamesArray].sort((a, b) => b.positive - a.positive).slice(0,500);
 const randomTopGame = mostEngaging[Math.floor(Math.random() * mostEngaging.length)];
 // var mostEngagingText = docum
 // mostEnga.innerText = mostEngaging.game;
 const titleElement = document.getElementById("mostEngagingTitle");
 titleElement.href = `https://store.steampowered.com/app/${randomTopGame.appid}/`;
 titleElement.innerText = `Looking for a game to play? Have you tried ${randomTopGame.name} yet?`;
-
+const titleImgElement = document.getElementById("mostEngagingImg");
+titleImgElement.src = `https://steamcdn-a.akamaihd.net/steam/apps/${randomTopGame.appid}/header.jpg`
+// titleImgElement.onclick = "window.open(" + `https://store.steampowered.com/app/${randomTopGame.appid}/` +")";
 const doughnutOptions = {
   maintainAspectRatio: false,
   elements:{
