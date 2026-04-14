@@ -46,21 +46,28 @@
       <h2 class="text-3xl text-[var(--steam-g)] mb-4">
         Welcome to the Homepage
       </h2>
+      <div class="bg-[var(--steam-bl)] p-6 mt-4">
+        <a class ="text-2xl text-white mb-2 hover:text-[var(--steam-b)] transition" id="mostEngagingTitle" href="/" target="_blank">Thinking of a recommendation...</a>
+      </div>
       <p class="text-right text-lg text-[var(--steam-g)] max-w-2xl">
       </p>
     </div>
 
-    <section id="highlights" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 select-none pointer-events-none">
-      <div class="bg-[var(--steam-bl2)] p-6">
-        <img src="{{ url_for('static', filename='images/highlight.jpg') }}" alt="Steam" class="w-full h-auto">
+    <section id="highlights" class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-8">
+      
+      <div class="bg-[var(--steam-bl2)] p-8 h-[600px]">
+        <h3 class="text-2xl text-white mb-2 hover:text-[var(--steam-b)] transition"> Most owned (ALL) </h3>
+          <canvas id = "chart"></canvas>
       </div>
 
-      <div class="bg-[var(--steam-bl)] p-6">
-        <img src="{{ url_for('static', filename='images/highlight.jpg') }}" alt="Steam" class="w-40rem">
+      <div class="bg-[var(--steam-bl)] p-8 h-[1000px]">
+        <h3 class="text-2xl text-white mb-2 hover:text-[var(--steam-b)] transition"> Most popular supported languages (ALL) </h3>
+        <canvas id = "chart2"></canvas>
       </div>
 
-      <div class="bg-[var(--steam-bl3)] p-6">
-        <img src="{{ url_for('static', filename='images/highlight.jpg') }}" alt="Steam" class="w-40rem">
+      <div class="bg-[var(--steam-bl3)] p-8 h-[1000px]">
+        <h3 class="text-2xl text-white mb-2 hover:text-[var(--steam-b)] transition"> Most popular tags (ALL)</h3>
+        <canvas id = "chart3"></canvas>
       </div>
     </section>
   </main>
@@ -79,6 +86,10 @@
 
   </footer>
 
-  <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+  const steamData = {{ data | tojson }};
+  </script>
+  <script src="{{url_for('static', filename='js/chart.js')}}"> </script>
 </body>
 </html>

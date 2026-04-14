@@ -30,7 +30,9 @@ def user_context(): # persistent info made avalible for all html templates
 
 @app.get("/")
 def home_get():
-    return render_template("home.html")
+    with open("static/detaileddata.json", "r") as f:
+        data = json.load(f)
+    return render_template("home.html", data=data)
 
 @app.route("/chart", methods=['GET', 'POST'])
 def chart_get():
@@ -49,4 +51,4 @@ def trends_get():
     return render_template("trends.html", id=steam_id)
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
