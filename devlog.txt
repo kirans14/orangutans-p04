@@ -32,3 +32,6 @@ mustafaA -- 2026-04-13 11:00
 kiranS -- 2026-04-13 23:15
 - Cleaned up frontend
 - Basic id input functionality
+
+mustafaA -- 2026-04-14 06:30
+- Added detaileddata.json sorting based on most owned games in api.py
