@@ -28,8 +28,6 @@
         the Formatting, Loading, & Aggregation of Data for Observations of Steam
       </p>
     </div>
-
-
     <div id="navigation" class="flex pr-8">
       <p class="select-none text-[var(--steam-g)]">
         <a href="/steam_id"
@@ -38,31 +36,26 @@
         </a>
       </p>
     </div>
+
   </header>
+
 
   <main class="bg-[url('{{ url_for('static', filename='images/colored_body_main.jpg') }}')] bg-no-repeat bg-cover flex-1 px-20 py-10 bg-[var(--steam-bg2)]">
 
     <div class="flex flex-col mb-10">
       <h2 class="text-3xl text-[var(--steam-g)] mb-4">
-        Welcome to the Homepage
+        Input your Steam ID to see your trends
       </h2>
+      <form action="/trends" method="GET">
+        <input type="text" id="steam_id" name="steam_id" required>
+        <br>
+        <button type="submit" style="color: white;">Submit</button>
+      </form>
       <p class="text-right text-lg text-[var(--steam-g)] max-w-2xl">
+        Note that your account must be public in order for your information to be accessed. 
       </p>
     </div>
 
-    <section id="highlights" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 select-none pointer-events-none">
-      <div class="bg-[var(--steam-bl2)] p-6">
-        <img src="{{ url_for('static', filename='images/highlight.jpg') }}" alt="Steam" class="w-full h-auto">
-      </div>
-
-      <div class="bg-[var(--steam-bl)] p-6">
-        <img src="{{ url_for('static', filename='images/highlight.jpg') }}" alt="Steam" class="w-40rem">
-      </div>
-
-      <div class="bg-[var(--steam-bl3)] p-6">
-        <img src="{{ url_for('static', filename='images/highlight.jpg') }}" alt="Steam" class="w-40rem">
-      </div>
-    </section>
   </main>
 
   <footer class="mb-12 pr-6 pt-6 text-center text-sm text-gray-500">

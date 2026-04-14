@@ -42,11 +42,11 @@ def chart_get():
 def id_get():
     return render_template("id.html")
 
-@app.post("/steam_id")
-def id_post():
-    steam_id = request.args["id"]
+@app.get("/trends")
+def trends_get():
+    steam_id = request.args["steam_id"]
     session["id"] = steam_id
-    return render_template("id.html", id=steam_id)
+    return render_template("trends.html", id=steam_id)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
