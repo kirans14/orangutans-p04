@@ -35,3 +35,6 @@ kiranS -- 2026-04-13 23:15
 
 mustafaA -- 2026-04-14 06:30
 - Added detaileddata.json sorting based on most owned games in api.py
+
+kiranS 10:50
+- Added DB methods for insert, select, and general query in db.py

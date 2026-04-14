@@ -1,17 +1,42 @@
+# Orangutans
+# Kiran Soemardjo, Eviss Wu, Mustafa Abdullah, Yu Lu
+# SoftDev
+
 import sqlite3
-import os
 
-DB = sqlite3.connect("Data.database.db")
-DB_CURSOR = DB.cursor()
-DB_CURSOR.execute("CREATE TABLE IF NOT EXISTS Games(app_id TEXT PRIMARY KEY, name TEST, release_date TEXT, developer TEXT, publisher TEXT, is_free BOOLEAN, price DOUBLE, description TEXT, genre_list TEXT, tag_list TEXT);")
-DB_CURSOR.execute("CREATE TABLE IF NOT EXISTS player_stats(app_id INTEGER FOREIGN KEY (app_id) REFERENCES GAMES(app_id), current_players INTEGER, peak_players_today INTEGER, time_fetched TEXT);")
-DB_CURSOR.execute("CREATE TABLE IF NOT EXISTS Users(steam_id TEXT PRIMARY_KEY, api_key TEXT, installed_games INTEGER, playtime DOUBLE);")
+DB_FILE="data.db"
 
-def add_user():
-    pass
+db = sqlite3.connect(DB_FILE, check_same_thread=False)
 
-def get_user():
-    pass
+#returns as list of dicts, where each item in the list is one row's entry, and each dict entry contains the selected data as the value for the column name as the key
+def select_query(query_string, parameters=()):
+    c = db.cursor()
+    c.execute(query_string, parameters)
+    out_array = []
+    column_names = c.description
+    for row in c.fetchall():
+        item_dict = dict()
+        for col in range(len(row)):
+             item_dict.update({column_names[col][0]: row[col]})
+        out_array.append(item_dict)
+    c.close()
+    db.commit()
+    return out_array
 
-def populate_db():
-    pass
+def insert_query(table, data):
+    c = db.cursor()
+    placeholder = ["?"] * len(data)
+    c.execute(f"INSERT INTO {table} {tuple(data.keys())} VALUES ({', '.join(placeholder)}) RETURNING *;", tuple(data.values()))
+    row = c.fetchall()
+    output = dict()
+    for col in range(len(row[0])):
+        output.update({c.description[col][0]: row[0][col]}) 
+    c.close()
+    db.commit()
+    return output
+
+def general_query(query_string, parameters=()):
+    c = db.cursor()
+    c.execute(query_string, parameters)
+    c.close()
+    db.commit()
