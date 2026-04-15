@@ -1,7 +1,7 @@
 const gamesArray = Object.values(steamData);
-const gameTags = gamesArray.map(game => Object.keys(game.tags).slice(0,5));
+const gameTags = gamesArray.map(game => Object.keys(game.tags));
 const gameLanguages = gamesArray.map(game => game.languages);
-const topAverage = [...gamesArray].sort((a, b) => b.average_forever - a.average_forever).slice(0, 30);
+const topAverage = [...gamesArray].sort((a, b) => b.positive - a.positive).slice(0, 30);
 
 
 // Fun recommendations
@@ -35,8 +35,8 @@ new Chart(document.getElementById('chart'), {
   data: {
     labels: topAverage.map(g => g.name),
     datasets: [{
-      label: 'Total Owners (Users)',
-      data: topAverage.map(g => g.average_forever),
+      label: 'Positive Reviews (Users)',
+      data: topAverage.map(g => g.positive),
       backgroundColor: 'rgba(54, 162, 235, 0.6)',
       borderColor: 'rgba(54, 162, 235, 1)',
       borderWidth: 1
@@ -45,7 +45,7 @@ new Chart(document.getElementById('chart'), {
   options: {maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
 });
 
-const tagCount = gameTags.flat();
+var tagCount = gameTags.flat();
 const tag = [...new Set(tagCount)].sort((a, b) => tagCount.filter(tc => tc === b).length - tagCount.filter(tc => tc === a).length).slice(0, 10);
 
 new Chart(document.getElementById('chart2'), {
@@ -53,7 +53,7 @@ new Chart(document.getElementById('chart2'), {
   data: {
     labels: tag,
     datasets: [{
-      label: 'Supported Language (Per Game)',
+      label: 'Game Tags (Per game)',
       data: tag.map(t => tagCount.filter(tc => tc === t).length),
       backgroundColor: [ // Array required to differentiate slices
         'rgba(255, 0, 55, 0.6)', 'rgba(0, 153, 255, 0.6)', 'rgba(255, 183, 0, 0.6)',
@@ -75,7 +75,7 @@ new Chart(document.getElementById("chart3"), {
   data: {
     labels: lang,
     datasets: [{
-      label: 'Game Tag (Per Game)',
+      label: 'Supported Language (Per Game)',
       data: lang.map(l => langCount.filter(lc => lc === l).length),
       backgroundColor: [
         'rgba(255, 0, 55, 0.6)', 'rgba(0, 153, 255, 0.6)', 'rgba(255, 183, 0, 0.6)',
