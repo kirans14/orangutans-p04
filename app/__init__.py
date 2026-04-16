@@ -6,11 +6,10 @@ from flask import Flask, render_template, request, flash, url_for, redirect, ses
 import sqlite3   #enable control of an sqlite database
 import csv       #facilitate CSV I/O
 from db import *
+from recommendations import get_recs
 import json
 from urllib.request import Request, urlopen
-import pprint
-import os
-import re
+import pprint, os, re
 # import fetcher
 
 # Initialize DB >>
@@ -42,13 +41,21 @@ def chart_get():
 
 @app.get("/steam_id")
 def id_get():
-    return render_template("id.html")
+    if "id" not in session:
+        return render_template("id.html")
+    return redirect(url_for("trends_get"))
 
 @app.get("/trends")
 def trends_get():
-    steam_id = request.args["steam_id"]
-    session["id"] = steam_id
-    return render_template("trends.html", id=steam_id)
+    if "id" in session:
+        steam_id = session["id"]
+    else:
+        steam_id = request.args["steam_id"]
+        session["id"] = steam_id
+    recs = get_recs(steam_id, 10)
+    return render_template("trends.html", recs = recs)
+
+# trends_post method for deleting id --> pop from session and redirect to /steam_id
 
 if __name__ == "__main__":
     app.run(debug=True)

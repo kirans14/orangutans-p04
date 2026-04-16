@@ -36,5 +36,27 @@ kiranS -- 2026-04-13 23:15
 mustafaA -- 2026-04-14 06:30
 - Added detaileddata.json sorting based on most owned games in api.py
 
-kiranS 10:50
+kiranS -- 2026-04-14 10:50 
 - Added DB methods for insert, select, and general query in db.py
+
+kiranS -- 2026-04-15 23:00
+- Worked on flask methods for entering id / getting trends -- now uses session to save id
+- Created skeleton of rec algo in recommendations.py (which returns n recommended games based on user's trends) and planned it out:
+    - weight e/ tag by cumulative playtime of games in user's library with the tag
+    - take the most heavily weighted tags and go down store list, from most to least positively reviewed (possibly weight the review "score" by number of reviews, since, eg, a 95% positive game w/ 100k reviews is more indicative of quality than a 100% positive game w/ 20 reviews)
+    - pick games with most similar tags, assuming they arent already owned:
+        - when iterating, prioritize filling all n rec "slots" first and swap games out when encountering one that matches better
+        - once rec list is sufficiently accurate to user's tags or once reaching end of store list, return the rec list
+    - potentially look at player's recently played games? --> weight more heavily
+    - possibly allow user to specify price constraints (if time permits)
+
+```
+HOME STRETCH CHECKLIST:
+------------------------------------
+* finish populating db with all col values :: Mustafa
+* clean up and standardize frontend :: Eviss
+* write any needed api call helper methods :: Eviss
+* finish methods for chart creation (pulling data from the db) :: Yu
+* finish recommendation algo :: Kiran
+====================================
+```
