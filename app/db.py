@@ -6,8 +6,11 @@ import sqlite3
 import json
 from datetime import datetime
 import os
+from urllib.request import Request, urlopen
+import pprint
+import re
 
-DB_FILE="data.db"
+DB_FILE="./data.db"
 
 db = sqlite3.connect(DB_FILE, check_same_thread=False)
 
@@ -43,6 +46,23 @@ def general_query(query_string, parameters=()):
     c.execute(query_string, parameters)
     c.close()
     db.commit()
+    
+def get_steam_description(app_id):
+    url = f"https://store.steampowered.com/api/appdetails?appids={app_id}"
+    req = urllib.request.Request(url, headers={"User Agent": "Mozilla/5.0"})
+    with urllib.request.urlopen(req, timeout=10) as r:
+        data = json.loads(r.read().decode())
+    app = data.get(str(app_id), {})
+    if not app.get("success"):
+        return f"No game found for App ID {app_id}."
+    info = app["data"]
+    name = info.get("name", "Unknown")
+    raw = info.get("detailed_description") or info.get("short_description", "")
+    desc = re.sub(r"<br\s/?>", "\n", raw, flags=re.IGNORECASE)
+    desc = re.sub(r"</?(p|li|ul|ol|h[1-6]|div)[^>]>", "\n", desc, flags=re.IGNORECASE)
+    desc = re.sub(r"<[^>]+>", "", desc)
+    desc = re.sub(r"\n{3,}", "\n\n", desc).strip()
+    return f"{name}\n\n{desc}"    
 
 def create_tables():
     general_query("""
@@ -74,7 +94,7 @@ def create_tables():
         CREATE TABLE IF NOT EXISTS Users (
             steam_id       TEXT PRIMARY KEY,
             api_key        TEXT,
-            installed_games INTEGER DEFAULT 0,
+            games          TEXT ,
             playtime       DOUBLE
         );
     """)
@@ -104,12 +124,14 @@ def populate_db(path):
 
         tags = g.get('tags', {})
 
-        sorted_items = sorted(tags.items(), key=lambda x: x[1], reverse=True)
+        sorted_items = sorted(tags.keys(), key=lambda x: x[1], reverse=True)
 
         keys_items = []
 
         for key, value in sorted_items:
             keys_items.append(key)
+        
+        tag_list = keys_items
 
         insert_query("Games", {
             "app_id":      str(app_id),
@@ -123,5 +145,11 @@ def populate_db(path):
             "genre_list":  genre_list,
             "tag_list":    None,
         })
+    
+    return tag_list
+    
+
+create_tables()
+pprint.pprint(populate_db("./static/detaileddata.json"))
 
 
