@@ -60,3 +60,7 @@ HOME STRETCH CHECKLIST:
 * finish recommendation algo :: Kiran
 ====================================
 ```
+
+mustafaA -- 2026-04-16 10:15
+- Started populating Games table with json file
+- TODO: populate the other three tables, create tag_list variable
