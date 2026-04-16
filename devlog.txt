@@ -64,3 +64,6 @@ HOME STRETCH CHECKLIST:
 mustafaA -- 2026-04-16 10:15
 - Started populating Games table with json file
 - TODO: populate the other three tables, create tag_list variable
+
+kiranS -- 2026-04-16 11:00
+- Deal with db creation issue and fixed column names 

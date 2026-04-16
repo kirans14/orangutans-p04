@@ -4,8 +4,8 @@
 from db import *
 
 def get_recs(steam_id, number):
-    games = select_query("SELECT games FROM players WHERE steam_id=?", [steam_id]).split(",")
-    playtimes = select_query("SELECT playtimes FROM players WHERE steam_id=?", [steam_id]).split(",")
+    games = select_query("SELECT games FROM users WHERE steam_id=?", [steam_id]).split(",")
+    playtimes = select_query("SELECT playtimes FROM users WHERE steam_id=?", [steam_id]).split(",")
     for i in range(games):
         pass 
     # weight e/ tag by cumulative playtime of games in user's library with the tag

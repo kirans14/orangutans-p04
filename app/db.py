@@ -65,6 +65,11 @@ def get_steam_description(app_id):
     return f"{name}\n\n{desc}"    
 
 def create_tables():
+    general_query("DROP TABLE IF EXISTS Games;")
+    general_query("DROP TABLE IF EXISTS Player_stats;")
+    general_query("DROP TABLE IF EXISTS Users;")
+    general_query("DROP TABLE IF EXISTS Reviews;")
+
     general_query("""
         CREATE TABLE IF NOT EXISTS Games (
             app_id       TEXT PRIMARY KEY,
@@ -150,6 +155,6 @@ def populate_db(path):
     
 
 create_tables()
-pprint.pprint(populate_db("./static/detaileddata.json"))
+# pprint.pprint(populate_db("./static/detaileddata.json"))
 
 
