@@ -67,3 +67,6 @@ mustafaA -- 2026-04-16 10:15
 
 kiranS -- 2026-04-16 11:00
 - Deal with db creation issue and fixed column names 
+
+evissW -- 2026-04-16 11:20
+- Created API calls for SteamID owned games (Have been doing all API helper functions so far)
