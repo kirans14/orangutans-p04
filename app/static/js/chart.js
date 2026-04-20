@@ -12,7 +12,7 @@ function parseList(games, key, limit = 10) {
     .map(i => i.trim())
     .filter(Boolean)
     .map(item => ({ item, appid: g.appid })));
-    
+
   const counts = items.reduce((result, {item, appid}) => {
     if (!result[item]) result[item] = { count: 0, ids: [] };
     result[item].count += 1;
@@ -22,7 +22,7 @@ function parseList(games, key, limit = 10) {
 
   const sorted = Object.entries(counts).sort((a,b) => b[1].count - a[1].count)
     .slice(0, limit);
-  
+
   return {
     labels: sorted.map(i => i[0]),
     data: sorted.map(i => i[1].count),
@@ -40,7 +40,7 @@ function parseDictKey(games, key, limit) {
   }
   const items = games.flatMap(g => Object.keys(g[key] || {})
     .map(item => ({ item, appid: g.appid })));
-    
+
   const counts = items.reduce((result, {item, appid}) => {
     if (!result[item]) result[item] = { count: 0, ids: [] };
     result[item].count += 1;
@@ -50,7 +50,7 @@ function parseDictKey(games, key, limit) {
 
   const sorted = Object.entries(counts).sort((a,b) => b[1].count - a[1].count)
     .slice(0, limit);
-  
+
   return {
     labels: sorted.map(i => i[0]),
     data: sorted.map(i => i[1].count),
@@ -69,17 +69,17 @@ function parseRanked(games, metric, limit = 10) {
   }
   const sorted = [...games]
     .sort((a, b) => (b[metric] || 0) - (a[metric] || 0)).slice(0, limit);
-  return { 
-    labels: sorted.map(g => g.name), 
+  return {
+    labels: sorted.map(g => g.name),
     data: sorted.map(g => g[metric]),
-    gameids: sorted.map(g => g.appid) 
+    gameids: sorted.map(g => g.appid)
   };
 }
 
 function renderRankedChart(metric, labelName) {
   const chartData = parseRanked(gamesArray, metric, 30);
   const canvasId = 'rankedChart';
-  
+
   const existingChart = Chart.getChart(canvasId);
   if (existingChart) {
     existingChart.destroy();
@@ -241,7 +241,7 @@ renderRankedChart('positive', 'Positive Reviews');
 metricSelector.addEventListener('change', (e) => {
   const selectedMetric = e.target.value;
   const selectedLabel = e.target.options[e.target.selectedIndex].text;
-  
+
   renderRankedChart(selectedMetric, selectedLabel);
 });
 
@@ -255,9 +255,3 @@ titleElement.innerText = `Looking for a game to play? Have you tried ${randomTop
 
 const titleImgElement = document.getElementById("mostEngagingImg");
 titleImgElement.src = `https://steamcdn-a.akamaihd.net/steam/apps/${randomTopGame.appid}/header.jpg`
-
-
-
-
-
-

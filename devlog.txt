@@ -36,7 +36,7 @@ kiranS -- 2026-04-13 23:15
 mustafaA -- 2026-04-14 06:30
 - Added detaileddata.json sorting based on most owned games in api.py
 
-kiranS -- 2026-04-14 10:50 
+kiranS -- 2026-04-14 10:50
 - Added DB methods for insert, select, and general query in db.py
 
 kiranS -- 2026-04-15 23:00
@@ -58,6 +58,20 @@ HOME STRETCH CHECKLIST:
 * write any needed api call helper methods :: Eviss
 * finish methods for chart creation (pulling data from the db) :: Yu
 * finish recommendation algo :: Kiran
+
+* Request from Yu:
+  Hi Mustafa I am looking for 3 sqlite helpers that can return a parsed verisons of our data
+  I want ideally an object that looks like this
+  {
+  labels:
+  data: (this contains the count/occurances of labels, should be same length as labels)
+  gameid: (the gameids used)
+  }
+
+  The data in our json follows  3 structures, and i need helpers for all 3
+  3. a simple integer (eg: "positive":	1044264), please find the original game, then return a direct integer comparisons per game into game : metric
+  1. a string separated by commas (eg: "English, Danish, Dutch, Finnish, French, German"), please find each unique label (eg: English) then count the occurance of that label totaled from all games
+  2. a dictionary (eg: "Hero Shooter": 61037), please find each unqiue occurance of the key (Eg: "Hero Shooter") and then count all occurances of that key accross all games
 ====================================
 ```
 
@@ -66,7 +80,7 @@ mustafaA -- 2026-04-16 10:15
 - TODO: populate the other three tables, create tag_list variable
 
 kiranS -- 2026-04-16 11:00
-- Deal with db creation issue and fixed column names 
+- Deal with db creation issue and fixed column names
 
 evissW -- 2026-04-16 11:20
 - Created API calls for SteamID owned games (Have been doing all API helper functions so far)
@@ -76,7 +90,7 @@ evissW -- 2026-04-19 18:00
 - wrote api method to return games+playtimes given a user's steamid
 
 kiranS -- 2026-04-20 01:00
-- Fully finished rec algo 
+- Fully finished rec algo
     - now uses cumulative playtimes of games w/ each tag to create a normalized vector for each user representing the tags they trend towards (w each dim being a tag)
     - each game on the store page gets a similar normalized vector based on community votes for each tag
     - distance is compared between the user vector and game vector, and minimum n are returned
