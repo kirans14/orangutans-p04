@@ -110,3 +110,18 @@ Yu Lu -- 2026-04-20 03:30
 - Replaced positive review games on front page with drop-down list
 - cleanup for homepage template and added a css file that has steam-themed colors for color scheme for now
 - added some more steam related images in static file, maybe move over to cloud later?
+
+Eviss Wu --2026-04-20 11:00
+- To Do
+    - Mustafa
+        - DataDump on Homepage recommendation
+        - SQLite3 functions
+    - Yu Lu
+        - Incorporate pull from SQLite3 functions
+        - Homepage arrows
+    - Kiran
+        - TBD
+    - Eviss
+        - Homepage beautify
+        - Loading page
+        - Your trends page
