@@ -86,7 +86,7 @@ def parse_owners(str):
 
 def get_steam_description(app_id):
     url = f"https://store.steampowered.com/api/appdetails?appids={app_id}"
-    req = urllib.request.Request(url, headers={"User Agent": "Mozilla/5.0"})
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=10) as r:
         data = json.loads(r.read().decode())
     app = data.get(str(app_id), {})

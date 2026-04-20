@@ -2,7 +2,7 @@
 # Kiran Soemardjo, Eviss Wu, Mustafa Abdullah, Yu Lu
 # SoftDev
 
-from api import get_steam_tags
+from api import get_steam_tags, get_steam_description
 from db import general_query, insert_query, select_query
 import json
 import numpy
@@ -67,7 +67,9 @@ def populate_db(path):
     tag_list = get_steam_tags()
     for app_id, g in data.items():
 
-        price = g.get("price", 0)
+        price = g.get("price", '')
+        price_dollars = int(price) / 100.0 if str(price).isdigit() else 0
+        is_free = price_dollars == 0
 
         genre_list = g.get('genre', '')
 
@@ -116,12 +118,39 @@ def populate_db(path):
             "release_date": None,            
             "developer":   g.get("developer", ""),
             "publisher":   g.get("publisher", ""),
-            "is_free":     None,
+            "is_free":     is_free,
             "price":       price,
-            "description": None,           
+            "description": get_steam_description(app_id),           
             "genre_list":  genre_list,
             "tag_list":    tags_string,
             "tag_vector":  ",".join(str(value) for value in tag_vector)
+        })
+    
+        
+#         insert_query("Players", {
+#             "app_id":      str(app_id),
+#             "name":        g.get("name", ""),
+#             "release_date": None,            
+#             "developer":   g.get("developer", ""),
+#             "publisher":   g.get("publisher", ""),
+#             "is_free":     None,
+#             "price":       price_dollars,
+#             "description": None,           
+#             "genre_list":  genre_list,
+#             "tag_list":    tags_string,
+#             "tag_vector":  ",".join(str(value) for value in tag_vector)
+#         })
+        
+        positive = g.get('positive', 0)
+        negative = g.get('negative', 0)
+        total = positive + negative
+        insert_query("Reviews", {
+            "app_id":      str(app_id),
+            "review_score":        g.get("name", ""),
+            "total_positive":    positive,            
+            "total_negative":   negative,
+            "total_review":   total,
+            "current_players":    g.get('ccu', 0)
         })
     
     return tags
