@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLaDOS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600&display=swap');
+    :root { --b: #66c0f4; --g: #c7d5e0; --dim: #8ba6b5; --border: #2a475e; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Rajdhani', Arial, sans-serif; background: #171a21; color: var(--g); min-height: 100vh; display: flex; flex-direction: column; }
+    @keyframes spin  { to { transform: rotate(360deg); } }
+    @keyframes bar   { from { width: 0%; } to { width: 68%; } }
+    @keyframes fadeup { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+    .spinner { width:40px; height:40px; border-radius:50%; border:2px solid var(--border); border-top-color:var(--b); animation:spin 1.2s linear infinite; }
+    .track { width:200px; height:3px; background:var(--border); border-radius:2px; overflow:hidden; }
+    .fill  { height:100%; background:var(--b); border-radius:2px; animation:bar 4s cubic-bezier(.4,0,.2,1) forwards; }
+    #status { animation: fadeup .4s ease both; }
+  </style>
+</head>
+<body>
+  <header style="border-bottom:1px solid var(--border);" class="flex items-center justify-between px-24 pt-8 pb-5">
+    <div class="flex flex-col pl-8">
+      <h1 class="text-2xl select-none flex items-center mb-1" style="color:var(--b);">
+        FLaDOS
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Steam" class="ml-4 w-8 h-auto">
+      </h1>
+      <p class="text-sm indent-4 italic select-none" style="color:var(--dim);">the Formatting, Loading, &amp; Aggregation of Data for Observations of Steam</p>
+    </div>
+    <a href="/steam_id" class="text-sm px-2 py-2 rounded-lg text-white hover:text-[var(--b)] transition pr-8">Your Trends</a>
+  </header>
+ 
+  <main class="flex-1 flex flex-col items-center justify-center gap-5">
+    <div class="spinner"></div>
+    <div class="flex flex-col items-center gap-2">
+      <span id="status" style="font-size:14px; color:var(--g);">Connecting to FLaDOS…</span>
+      <div class="track"><div class="fill"></div></div>
+      <span style="font-size:12px; color:var(--dim);">This won't take long.</span>
+    </div>
+  </main>
+ 
+  <footer class="mb-10 pt-6 text-center text-sm select-none" style="color:#6b7280;">
+    <a href="/" style="color:#6b7280;" onmouseover="this.style.color='var(--b)'" onmouseout="this.style.color='#6b7280'">↑ Go to top</a>
+    &nbsp;|&nbsp;
+    <a href="https://github.com/kirans14/orangutans-p04" style="color:#6b7280;" onmouseover="this.style.color='var(--b)'" onmouseout="this.style.color='#6b7280'">Made by Orangutans, SoftDev P04</a>
+    &nbsp;| 2026
+  </footer>
+ 
+  <script>
+    const messages = [
+      "Connecting to FLaDOS…",
+      "Fetching your Steam data…",
+      "Crunching the numbers…",
+      "Almost there…"
+    ];
+    let i = 0;
+    const el = document.getElementById('status');
+    setInterval(() => {
+      i = Math.min(i + 1, messages.length - 1);
+      el.style.animation = 'none';
+      el.offsetHeight;
+      el.style.animation = 'fadeup .4s ease both';
+      el.textContent = messages[i];
+    }, 1800);
+  </script>
+</body>
+</html>
