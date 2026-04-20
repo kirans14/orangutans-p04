@@ -128,3 +128,6 @@ Eviss Wu --2026-04-20 11:00
 
 Eviss Wu -- 2026-04-20 5:44
 - Added loading.html page
+
+Eviss Wu -- 2026-04-20 6:06
+- Added yourtrends.html skeleton
