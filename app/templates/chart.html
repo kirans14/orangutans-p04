@@ -15,13 +15,10 @@
 </head>
 
 <body class="min-h-screen flex flex-col">
-  <canvas id = "chart"></canvas>
-  <canvas id = "chart2"></canvas>
-  <canvas id = "chart3"></canvas>
   <button type="button" class="hover:text-orange-500 transition" id="btn">Click Me!</button>
 
   <main class="flex-1 max-w-6xl mx-auto w-full px-6 py-10">
-    <h2 id = "tester"></h2>
+    <h2 id = "tester">hi</h2>
   </main>
 
   <footer class="mt-12 py-6 text-center text-sm text-gray-500">
@@ -34,7 +31,7 @@
   <script>
   const steamData = {{ data | tojson }};
   </script>
-  <script src="{{url_for('static', filename='js/chart.js')}}"> </script>
+  <script src="{{url_for('static', filename='js/chart2.js')}}"> </script>
 </body>
 
 </html>

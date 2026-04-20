@@ -87,3 +87,12 @@ kiranS -- 2026-04-20 01:00
 - Created build_db file so db isnt rebuilt e/ time db.py is imported
 - Wrote tag_vector creation for e/ game in build_db to minimize computation (only done when db is initialized or updated)
 - Made api key txt file and altered api.py methods to use it
+
+Yu Lu -- 2026-04-20 03:30
+- Rewrote chart.js
+    - All chart creation is wrapped inside of functions
+    - Parsing helper functions from json for now as sqlite is being built
+    - created ready templates for all chart types
+- Replaced positive review games on front page with drop-down list
+- cleanup for homepage template and added a css file that has steam-themed colors for color scheme for now
+- added some more steam related images in static file, maybe move over to cloud later?
