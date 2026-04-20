@@ -128,15 +128,22 @@ def populate_db(path):
         genre_list = g.get('genre', '')
 
         tags = g.get('tags', {})
+        # if tags:
 
-        sorted_items = sorted(tags.keys(), key=lambda x: x[1], reverse=True)
+        #     sorted_items = sorted(tags.items(), key=lambda x: x[1], reverse=True)
 
-        keys_items = []
+        #     keys_items = []
+        #     values_items = []
 
-        for key, value in sorted_items:
-            keys_items.append(key)
-        
-        tag_list = keys_items
+        #     for key, value in sorted_items:
+        #         keys_items.append(key)
+        #         values_items.append(value)
+            
+        #     tag_list = ", ".join(keys_items)
+        # else:
+        #     tag_list = ''
+
+        tags_string = json.dumps(tags)
 
         insert_query("Games", {
             "app_id":      str(app_id),
@@ -148,13 +155,13 @@ def populate_db(path):
             "price":       price,
             "description": None,           
             "genre_list":  genre_list,
-            "tag_list":    None,
+            "tag_list":    tags_string,
         })
     
-    return tag_list
+    return tags
     
 
 create_tables()
-# pprint.pprint(populate_db("./static/detaileddata.json"))
+pprint.pprint(populate_db("./static/detaileddata.json"))
 
 
