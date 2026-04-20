@@ -5,7 +5,8 @@
 from flask import Flask, render_template, request, flash, url_for, redirect, session
 import sqlite3   #enable control of an sqlite database
 import csv       #facilitate CSV I/O
-from db import *
+from db import select_query, insert_query, general_query
+from api import get_games_and_playtime
 from recommendations import get_recs
 import json
 from urllib.request import Request, urlopen
@@ -45,6 +46,7 @@ def id_get():
         return render_template("id.html")
     return redirect(url_for("trends_get"))
 
+# ADD VERIFICATION OF STEAMID
 @app.get("/trends")
 def trends_get():
     if "id" in session:
@@ -52,6 +54,15 @@ def trends_get():
     else:
         steam_id = request.args["steam_id"]
         session["id"] = steam_id
+        games_and_playtime = get_games_and_playtime(steam_id)
+        game_list = ",".join([str(game) for game in games_and_playtime[0]])
+        playtimes = ",".join([str(playtime) for playtime in games_and_playtime[1]])
+        # print(game_list)
+        # print(playtimes)
+        if select_query("SELECT * FROM users WHERE steam_id=?", [steam_id]) != []:
+            general_query("UPDATE users SET games=?, playtimes=? WHERE steam_id=?", [game_list, playtimes, steam_id])
+        else:
+            insert_query("users", {"steam_id": steam_id, "games": game_list, "playtimes": playtimes})
     recs = get_recs(steam_id, 10)
     return render_template("trends.html", recs = recs)
 

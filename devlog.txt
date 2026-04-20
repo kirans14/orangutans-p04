@@ -70,3 +70,20 @@ kiranS -- 2026-04-16 11:00
 
 evissW -- 2026-04-16 11:20
 - Created API calls for SteamID owned games (Have been doing all API helper functions so far)
+
+evissW -- 2026-04-19 18:00
+- Wrote api method to return an alphabetized list of all english tags
+- wrote api method to return games+playtimes given a user's steamid
+
+kiranS -- 2026-04-20 01:00
+- Fully finished rec algo 
+    - now uses cumulative playtimes of games w/ each tag to create a normalized vector for each user representing the tags they trend towards (w each dim being a tag)
+    - each game on the store page gets a similar normalized vector based on community votes for each tag
+    - distance is compared between the user vector and game vector, and minimum n are returned
+    - fairly accurate, but doesnt take into account popularity of games/how well rated they are, and doesnt weight recently played games higher
+    - had to hardcode some changes to tag names due to mismatch between store tag list and e/ individual game tag list (inconsistent hyphens, etc)
+- Updated reqs
+- Updated init to put user entered info into sql db
+- Created build_db file so db isnt rebuilt e/ time db.py is imported
+- Wrote tag_vector creation for e/ game in build_db to minimize computation (only done when db is initialized or updated)
+- Made api key txt file and altered api.py methods to use it
