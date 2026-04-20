@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLaDOS — Your Trends</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen flex flex-col bg-[var(--steam-bg)]">
+
+  <header class="bg-[url('{{ url_for('static', filename='images/colored_body_top.png') }}')] w-full backdrop-blur flex items-center justify-between px-24 pt-8 pb-5">
+    <div id="title" class="flex flex-col pl-8">
+      <h1 class="text-2xl text-[var(--steam-b)] select-none flex flex-row mb-2">
+        FLaDOS
+        <div id="logo" class="ml-4 w-8 h-8">
+          <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Steam" class="w-20 h-auto">
+        </div>
+      </h1>
+      <p class="text-sm indent-4 italic text-clamp-1 text-[var(--steam-g)] select-none">
+        the Formatting, Loading, &amp; Aggregation of Data for Observations of Steam
+      </p>
+    </div>
+    <div id="navigation" class="flex pr-8">
+      <p class="select-none text-[var(--steam-g)]">
+        <a href="/" class="text-sm px-2 py-2 rounded-lg text-white hover:text-[var(--steam-b)] transition">
+          Homepage
+        </a>
+      </p>
+    </div>
+  </header>
+
+  <main class="bg-[url('{{ url_for('static', filename='images/colored_body_main.jpg') }}')] bg-no-repeat bg-cover flex-1 px-20 py-10 bg-[var(--steam-bg2)]">
+
+    <div class="flex flex-col mb-10">
+      <h2 class="text-3xl text-[var(--steam-g)] mb-4">
+        Your Trends
+      </h2>
+      <div class="bg-[var(--steam-bl)] p-6 mt-4 select-none">
+        <a class="text-2xl text-white mb-2 hover:text-[var(--steam-b)] transition" id="mostEngagingTitle" href="/" target="_blank">Thinking of a recommendation...</a>
+        <img src="" onclick="" role="button" id="mostEngagingImg">
+      </div>
+    </div>
+
+    <section id="highlights" class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-8">
+
+      <div class="bg-[var(--steam-bl2)] p-8 h-[600px] flex flex-col">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-2xl text-white hover:text-[var(--steam-b)] transition">
+            Playtime Over Time
+          </h3>
+        </div>
+        <div class="relative flex-1 w-full h-full">
+          <canvas id="playtimeChart"></canvas>
+        </div>
+      </div>
+
+      <div class="bg-[var(--steam-bl3)] p-8 h-[1000px]">
+        <h3 class="text-2xl text-white mb-2 hover:text-[var(--steam-b)] transition">Most played games</h3>
+        <canvas id="mostPlayedChart"></canvas>
+      </div>
+
+      <div class="bg-[var(--steam-bl3)] p-8 h-[1000px]">
+        <h3 class="text-2xl text-white mb-2 hover:text-[var(--steam-b)] transition">Review &amp; rating breakdown</h3>
+        <canvas id="reviewChart"></canvas>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="mb-12 pr-6 pt-6 text-center text-sm text-gray-500">
+    <p class="select-none">
+      <a href="/" class="hover:text-[var(--steam-b)] transition">↑ Go to top</a>
+      |
+      <a href="https://github.com/kirans14/orangutans-p04" class="hover:text-[var(--steam-b)] transition">Made by Orangutans, SoftDev P04 |</a>
+      2026
+    </p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>const userData = {{ data | tojson }};</script>
+  <script src="{{ url_for('static', filename='js/trends.js') }}"></script>
+
+</body>
+</html>
