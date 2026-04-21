@@ -165,7 +165,7 @@ async function loadRecommendation() {
     if (randomTopGame && randomTopGame.app_id) {
       const titleElement = document.getElementById("mostEngagingTitle");
       titleElement.href = `https://store.steampowered.com/app/${randomTopGame.app_id}/`;
-      titleElement.innerText = `Looking for a game to play? Have you tried ${randomTopGame.name} yet?`;
+      titleElement.innerText = `Have you tried ${randomTopGame.name} yet?`;
 
       const titleImgElement = document.getElementById("mostEngagingImg");
       titleImgElement.src = `https://steamcdn-a.akamaihd.net/steam/apps/${randomTopGame.app_id}/header.jpg`;
@@ -177,7 +177,7 @@ async function loadRecommendation() {
 
 fetchAndRenderChart('/api/counts/tag_list/10', 'chart2', 'doughnut', 'Top 10 Tags');
 fetchAndRenderChart('/api/counts/genre_list/10', 'chart3', 'doughnut', 'Top 10 Genres');
-fetchAndRenderChart('/api/ranked/total_positive/30', 'rankedChart', 'bar', 'Positive Reviews');
+fetchAndRenderChart('/api/ranked/total_positive/25', 'rankedChart', 'bar', 'Positive Reviews');
 loadRecommendation();
 
 const metricSelector = document.getElementById('metricSelector');
@@ -185,7 +185,7 @@ if (metricSelector) {
   metricSelector.addEventListener('change', (e) => {
     const selectedMetric = e.target.value;
     const selectedLabel = e.target.options[e.target.selectedIndex].text
-    fetchAndRenderChart(`/api/ranked/${selectedMetric}/30`, 'rankedChart', 'bar', selectedLabel);
+    fetchAndRenderChart(`/api/ranked/${selectedMetric}/25`, 'rankedChart', 'bar', selectedLabel);
   });
 }
 

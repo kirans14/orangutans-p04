@@ -143,9 +143,8 @@ async function loadUserTrends() {
             console.error("API Error:", data.error);
             return;
         }
-        buildChart('mostPlayedChart', 'doughnut', data.genre_playtime.labels, data.genre_playtime.data, 'Playtime (Minutes)');
-        buildChart('playtimeChart', 'bar', data.most_played.labels, data.most_played.data, 'Total Playtime (Minutes)');
-        buildChart('reviewChart', 'pie', data.reviews.labels, data.reviews.data, 'Review Count');
+        buildChart('mostPlayedChart', 'doughnut', data.genre_playtime.labels, data.genre_playtime.data, 'Playtime (Hours)');
+        buildChart('playtimeChart', 'bar', data.most_played.labels, data.most_played.data, 'Total Playtime (Hours)');
 
         const topGamesContainer = document.getElementById('topGamesList');
         const limit = Math.min(5, data.most_played.labels.length);

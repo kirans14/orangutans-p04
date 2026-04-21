@@ -46,26 +46,31 @@
       <h2 class="text-3xl text-[var(--steam-g)] mb-4">
         Welcome to the Homepage
       </h2>
-      <div class="bg-[var(--steam-bl)] p-6 mt-4 select-none">
-        <a class ="text-2xl text-white mb-2 hover:text-[var(--steam-b)] transition" id="mostEngagingTitle" href="/" target="_blank">Thinking of a recommendation...</a>
-        <img src = "" onclick ="" role="button" id="mostEngagingImg">
+      <!-- recommednation system-->
+      <div class="bg-[var(--steam-bl)] p-6 mt-4 select-none mx-auto w-fit shadow-lg">
+        <a class="block text-2xl mx-auto w-fit text-white mb-4 hover:text-[var(--steam-b)] transition" id="mostEngagingTitle" href="/" target="_blank">Thinking of a recommendation...</a>
+        <div class="flex flex-row gap-6 mb-4">
+          <img src="" onclick="" role="button" id="mostEngagingImg">
+          <div class="flex flex-col justify-center">
+            <p class="text-m text-[var(--steam-g)] mb-2">REVIEWS: <span id="recReviews"></span></p>
+            <p class="text-m text-[var(--steam-g)] mb-2">PUBLISHER: <span id="recPublisher"></span></p>
+            <div id="recTags" class="tag-container mt-2 flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+        <a href="#" class="inline-block bg-[var(--steam-b)] text-[var(--steam-bl2)] px-5 py-2 text-[15px] rounded-[2px] shadow-sm hover:bg-[var(--steam-b)] hover:text-white transition-colors duration-200 select-none cursor-pointer">View Page</a>
       </div>
-      <p class="text-right text-lg text-[var(--steam-g)] max-w-2xl">
-      </p>
     </div>
     <section id="highlights" class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-8">
 
-      <div class="bg-[var(--steam-bl2)] p-8 h-[600px] flex flex-col">
+      <div class="bg-[var(--steam-bl2)] p-8 h-[600px] flex flex-col shadow-xl/30">
         <div class="flex justify-between items-center mb-4">
           <h3 class="text-2xl text-white hover:text-[var(--steam-b)] transition">
-            Top 30 Games by Metric
+            Top 25 Games by Metric
           </h3>
           <select id="metricSelector" class="bg-[#1b2838] text-white p-2 rounded border border-[#101822] focus:outline-none focus:border-[var(--steam-b)] transition cursor-pointer">
-            <option value="positive">Positive Reviews</option>
-            <option value="negative">Negative Reviews</option>
-            <option value="ccu">Peak CCU</option>
-            <option value="average_forever">Average Playtime (Minutes)</option>
-            <option value="price">Price (Cents)</option>
+            <option value="total_positive">Positive Reviews</option>
+            <option value="total_negative">Negative Reviews</option>
+            <option value="price">Price $(USD)</option>
           </select>
         </div>
         <div class="relative flex-1 w-full h-full">

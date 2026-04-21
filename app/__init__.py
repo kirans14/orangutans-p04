@@ -79,31 +79,34 @@ def logout_get():
 
 #neccessary api fetches for charts below
 @app.route('/api/ranked/<metric>/<int:limit>')
-#   Parses direct integer comparisons per game into game : metric
-#   eg: ccu, positive, average_forever
 def get_chart_ranked(metric, limit):
-    allowed = {'total_positive', 'total_negative', 'total_reviews'}
+    allowed = {
+        'total_positive': 'r.total_positive',
+        'total_negative': 'r.total_negative',
+        'total_reviews':  'r.total_reviews',
+        'price':          'g.price / 100.0' # btw why tf is prioce not in the rviews table
+    }
     # parameter checkers
-    if metric not in allowed: 
+    if metric not in allowed:
+        print(f"get_chart_ranked: Hi. '{metric}' is not supported yet! Using 'total_positive' instead")
         metric = 'total_positive'
-        print(f"get_chart_ranked: Hi. {metric} is not on the list of allowed metrics! Using 'total_positive' instead")
+        
     if not isinstance(limit, int) or limit <= 0:
         print(f"get_chart_ranked: Hi. {limit} is not a positive integer!")
-        return
-    #name, metric data, and app_id
+        return jsonify({'error': 'Limit must be a positive integer'}), 400
+    db_column = allowed[metric]
     query = f"""
-        SELECT g.name, r.{metric} AS data, g.app_id 
+        SELECT g.name, {db_column} AS data, g.app_id 
         FROM Games g
-        JOIN Reviews r ON g.app_id = r.app_id
-        ORDER BY r.{metric} DESC
+        LEFT JOIN Reviews r ON g.app_id = r.app_id
+        ORDER BY {db_column} DESC
         LIMIT {limit};
     """
     results = select_query(query)
-    
     return jsonify({
-        'labels': [r['name'] for r in results],
-        'data': [r['data'] for r in results],
-        'gameids': [r['app_id'] for r in results]
+        'labels': [row['name'] for row in results],
+        'data': [row['data'] for row in results],
+        'gameids': [row['app_id'] for row in results]
     })
 
 @app.route('/api/counts/<attribute>/<int:limit>')
@@ -153,14 +156,13 @@ def get_chart_counts(attribute, limit):
 @app.route('/api/homepage_recommendation')
 def get_homepage_recommendation():
     query = """
-        SELECT g.app_id, g.name 
+        SELECT g.app_id, g.name, g.publisher, g.tag_list, g.genre_list, r.total_positive, r.total_negative
         FROM Games g
         JOIN Reviews r ON g.app_id = r.app_id
         ORDER BY r.total_positive DESC
         LIMIT 500;
     """
     results = select_query(query)
-    # one random game from the top 500
     return jsonify(random.choice(results) if results else {})
 
 @app.route('/api/user_data')
@@ -175,7 +177,7 @@ def get_user_data():
         return jsonify({"error": "No user data found"}), 404
     # print(user_info)
     user_games = user_info[0]["games"].split(",")
-    user_playtimes = [int(p) for p in user_info[0]["playtimes"].split(",")]
+    user_playtimes = [round(int(p) / 60.0, 2) for p in user_info[0]["playtimes"].split(",")]
     # print(user_games)
     # print(user_playtimes)
 
