@@ -147,3 +147,11 @@ Reframed parsing from json to sqlite db
     - Rewrote chart creation functions in chart.js to be async
 Added new trends.js to support chart creation on yourtrends.html, and dynamically display user data based on what is fetched through steamapi
 Updated yourtrends.html templates for better chart visuals
+
+mustafaA -- 2026-04-21 10:40
+*TODO BEFORE 20:00
+    1) Fix front page formatting
+    2) Fix trends button, add logout button
+    3) Tell "why" the game is recommended
+    4) Add more game recommendations in front screen, fix top of home page formatting
+    5) Add introductory blurb for homepage
