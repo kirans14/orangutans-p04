@@ -167,6 +167,8 @@ async function loadRecommendation() {
       titleElement.href = `https://store.steampowered.com/app/${randomTopGame.app_id}/`;
       titleElement.innerText = `Looking for a game to play? Have you tried ${randomTopGame.name} yet?`;
 
+      const titleImgLink = document.getElementById("mostEngagingImgLink");
+      titleImgLink.href = `https://store.steampowered.com/app/${randomTopGame.app_id}/`;
       const titleImgElement = document.getElementById("mostEngagingImg");
       titleImgElement.src = `https://steamcdn-a.akamaihd.net/steam/apps/${randomTopGame.app_id}/header.jpg`;
     }
@@ -188,5 +190,3 @@ if (metricSelector) {
     fetchAndRenderChart(`/api/ranked/${selectedMetric}/30`, 'rankedChart', 'bar', selectedLabel);
   });
 }
-
-
