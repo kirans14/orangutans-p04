@@ -52,9 +52,11 @@ def trends_get():
     if "id" in session:
         steam_id = session["id"]
     else:
-        steam_id = request.args["steam_id"]
-        session["id"] = steam_id
+        steam_id = request.args["steam_id"].strip()
         games_and_playtime = get_games_and_playtime(steam_id)
+        if games_and_playtime == 0:
+            print("a")
+            return redirect(url_for("steam_id"))
         game_list = ",".join([str(game) for game in games_and_playtime[0]])
         playtimes = ",".join([str(playtime) for playtime in games_and_playtime[1]])
         # print(game_list)
@@ -63,11 +65,16 @@ def trends_get():
             general_query("UPDATE users SET games=?, playtimes=? WHERE steam_id=?", [game_list, playtimes, steam_id])
         else:
             insert_query("users", {"steam_id": steam_id, "games": game_list, "playtimes": playtimes})
+        session["id"] = steam_id
     recs = get_recs(steam_id, 10)
     rec_list = [str(select_query("SELECT name FROM games WHERE app_id=?", [rec])[0]["name"]) for rec in recs]
     return render_template("yourtrends.html", rec_list = rec_list)
 
-# trends_post method for deleting id --> pop from session and redirect to /steam_id
+@app.get("/logout")
+def logout_get():
+    general_query("DELETE FROM users WHERE steam_id=?", [session["id"]])
+    session.pop("id")
+    return redirect(url_for("home_get"))
 
 if __name__ == "__main__":
     app.run(debug=True)

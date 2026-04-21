@@ -110,4 +110,3 @@ def get_steam_description(app_id):
 
 # for rank, game in enumerate(sorted_games, start=1):
 #     print(f"{rank}. {game['name']} {game['owners']}")
-

@@ -135,3 +135,7 @@ Eviss Wu -- 2026-04-20 6:06
 kiranS -- 2026-04-20 21:45
 - Removed description column from games table to reduce api calls -- description will be accessed as needed
 - Passed in list of game names into yourtrends.html from flask for display (links/game info coming later)
+
+kiranS -- 2026-04-20 22:30
+- Added logout functionality to wipe steamid from session and remove the data associated with that steam_id from the db
+- 
