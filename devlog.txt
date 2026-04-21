@@ -108,8 +108,6 @@ Yu Lu -- 2026-04-20 03:30
     - Parsing helper functions from json for now as sqlite is being built
     - created ready templates for all chart types
 - Replaced positive review games on front page with drop-down list
-- cleanup for homepage template and added a css file that has steam-themed colors for color scheme for now
-- added some more steam related images in static file, maybe move over to cloud later?
 
 Eviss Wu --2026-04-20 11:00
 - To Do
@@ -138,4 +136,10 @@ kiranS -- 2026-04-20 21:45
 
 kiranS -- 2026-04-20 22:30
 - Added logout functionality to wipe steamid from session and remove the data associated with that steam_id from the db
-- 
+
+Yu Lu -- 2026-04-21 8:00
+Reframed parsing from json to sqlite db
+    - Added new routes in __ini__.python to parse data from sqlite database for js use
+    - Rewrote chart creation functions in chart.js to be async
+Added new trends.js to support chart creation on yourtrends.html, and dynamically display user data based on what is fetched through steamapi
+Updated yourtrends.html templates for better chart visuals

@@ -57,20 +57,26 @@
 
     <section id="highlights" class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-8">
 
-      <div class="bg-[var(--steam-bl2)] p-8 h-[600px] flex flex-col">
+      <div class="bg-[var(--steam-bl2)] p-8 h-[800px] flex flex-col">
         <div class="flex justify-between items-center mb-4">
           <h3 class="text-2xl text-white hover:text-[var(--steam-b)] transition">
             Playtime Over Time
           </h3>
+          <div id="topGamesList" class="flex flex-row gap-3"> </div>
         </div>
-        <div class="relative flex-1 w-full h-full">
+        <div class="relative flex-1 w-full h-[600px]">
           <canvas id="playtimeChart"></canvas>
         </div>
       </div>
 
       <div class="bg-[var(--steam-bl3)] p-8 h-[1000px]">
-        <h3 class="text-2xl text-white mb-2 hover:text-[var(--steam-b)] transition">Most played games</h3>
-        <canvas id="mostPlayedChart"></canvas>
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-2xl text-white mb-2 hover:text-[var(--steam-b)] transition">Most played categories</h3>
+          <div id="topCategoriesList" class="flex flex-row gap-3"> </div>
+        </div>
+        <div class="relative flex-1 w-full h-[900px]">
+          <canvas id="mostPlayedChart"></canvas>
+        </div>
       </div>
 
       <div class="bg-[var(--steam-bl3)] p-8 h-[1000px]">

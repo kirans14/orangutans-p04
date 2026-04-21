@@ -1,4 +1,3 @@
-
 const steamTheme = {
   doughnut: {
     colors: [
@@ -132,61 +131,67 @@ function buildChart(canvasId, type, labels, data, datasetLabel) {
   });
 }
 
+async function loadUserTrends() {
+    try {
+        const response = await fetch('/api/user_data');
+        if (!response.ok) {
+            console.error("failed to fetch user data. status:", response.status);
+            return;
+        }
+        const data = await response.json();
+        if (data.error) {
+            console.error("API Error:", data.error);
+            return;
+        }
+        buildChart('mostPlayedChart', 'doughnut', data.genre_playtime.labels, data.genre_playtime.data, 'Playtime (Minutes)');
+        buildChart('playtimeChart', 'bar', data.most_played.labels, data.most_played.data, 'Total Playtime (Minutes)');
+        buildChart('reviewChart', 'pie', data.reviews.labels, data.reviews.data, 'Review Count');
 
-async function fetchAndRenderChart(url, canvasId, chartType, labelName) {
-  try {
-    // init and cleanups
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const chartData = await response.json();
-    if (chartData.error) {
-        console.error("Backend error:", chartData.error);
-        return;
-    }
-    const existingChart = Chart.getChart(canvasId);
-    if (existingChart) {
-      existingChart.destroy();
-    }
+        const topGamesContainer = document.getElementById('topGamesList');
+        const limit = Math.min(5, data.most_played.labels.length);
 
-    // Pass formatted data to buildChart
-    buildChart(canvasId, chartType, chartData.labels, chartData.data, labelName);
-  } catch (error) {
-    console.error(`Error loading data for ${canvasId}:`, error);
-  }
+        for (let i = 0; i < limit; i++) {
+          const name = data.most_played.labels[i];
+          const appId = data.most_played.app_ids[i];
+          const gameLink = document.createElement('a');
+
+          gameLink.href = `https://store.steampowered.com/app/${appId}/`;
+          gameLink.target = "_blank";
+          gameLink.className = "flex items-center gap-4 bg-[var(--steam-bg)] p-1 hover:bg-[var(--steam-bl)]";
+
+          const gameImg = document.createElement('img');
+          gameImg.src = `https://steamcdn-a.akamaihd.net/steam/apps/${appId}/header.jpg`;
+          gameImg.alt = name;
+          gameImg.className = "w-32 h-auto rounded shadow-sm object-cover";
+          
+          const nameSpan = document.createElement('span');
+          nameSpan.className = "text-lg text-white";
+          nameSpan.textContent = name;
+
+          gameLink.appendChild(gameImg);
+          gameLink.appendChild(nameSpan);
+          topGamesContainer.appendChild(gameLink);
+        }
+
+        const topCategoriesContainer = document.getElementById('topCategoriesList');
+        topCategoriesContainer.innerHTML = ''; 
+        const limitCategories = Math.min(5, data.genre_playtime.labels.length);
+
+        for (let i = 0; i < limitCategories; i++) {
+            const tagName = data.genre_playtime.labels[i];
+            const safeTagUrl = encodeURIComponent(tagName);
+
+            const tagLink = document.createElement('a');
+            tagLink.href = `https://store.steampowered.com/tags/en/${safeTagUrl}/`;
+            tagLink.target = "_blank";
+            tagLink.className = "flex items-center gap-4 bg-[var(--steam-bg)] px-4 py-2 hover:bg-white hover:text-[var(--steam-bg)] text-white";
+            tagLink.textContent = tagName; 
+            topCategoriesContainer.appendChild(tagLink);
+        }
+
+    } catch (error) {
+        console.error("Error loading charts:", error);
+    }
 }
 
-async function loadRecommendation() {
-  try {
-    const res = await fetch('/api/homepage_recommendation');
-    const randomTopGame = await res.json();
-
-    if (randomTopGame && randomTopGame.app_id) {
-      const titleElement = document.getElementById("mostEngagingTitle");
-      titleElement.href = `https://store.steampowered.com/app/${randomTopGame.app_id}/`;
-      titleElement.innerText = `Looking for a game to play? Have you tried ${randomTopGame.name} yet?`;
-
-      const titleImgElement = document.getElementById("mostEngagingImg");
-      titleImgElement.src = `https://steamcdn-a.akamaihd.net/steam/apps/${randomTopGame.app_id}/header.jpg`;
-    }
-  } catch (error) {
-    console.error("Error loading recommendation:", error);
-  }
-}
-
-fetchAndRenderChart('/api/counts/tag_list/10', 'chart2', 'doughnut', 'Top 10 Tags');
-fetchAndRenderChart('/api/counts/genre_list/10', 'chart3', 'doughnut', 'Top 10 Genres');
-fetchAndRenderChart('/api/ranked/total_positive/30', 'rankedChart', 'bar', 'Positive Reviews');
-loadRecommendation();
-
-const metricSelector = document.getElementById('metricSelector');
-if (metricSelector) {
-  metricSelector.addEventListener('change', (e) => {
-    const selectedMetric = e.target.value;
-    const selectedLabel = e.target.options[e.target.selectedIndex].text
-    fetchAndRenderChart(`/api/ranked/${selectedMetric}/30`, 'rankedChart', 'bar', selectedLabel);
-  });
-}
-
-
+loadUserTrends();

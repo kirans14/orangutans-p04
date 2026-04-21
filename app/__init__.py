@@ -2,7 +2,7 @@
 #Orangutans
 
 # Imports >>
-from flask import Flask, render_template, request, flash, url_for, redirect, session
+from flask import Flask, render_template, request, flash, url_for, redirect, session, jsonify
 import sqlite3   #enable control of an sqlite database
 import csv       #facilitate CSV I/O
 from db import select_query, insert_query, general_query
@@ -10,14 +10,15 @@ from api import get_games_and_playtime
 from recommendations import get_recs
 import json
 from urllib.request import Request, urlopen
-import pprint, os, re
+import pprint, os
+import random
 # import fetcher
 
 # Initialize DB >>
 
 # Create instance of Flask app >>
 app = Flask(__name__)
-app.secret_key = "ABCEDFGHIJKLMNOPQRSTUVWXYZ1234567890987654321"
+app.secret_key = "ABCEDFGHIJKLMNOPQRSTUVWXYZ12345678909876543216767667"
 
 @app.context_processor
 def user_context(): # persistent info made avalible for all html templates
@@ -76,5 +77,168 @@ def logout_get():
     session.pop("id")
     return redirect(url_for("home_get"))
 
+#neccessary api fetches for charts below
+@app.route('/api/ranked/<metric>/<int:limit>')
+#   Parses direct integer comparisons per game into game : metric
+#   eg: ccu, positive, average_forever
+def get_chart_ranked(metric, limit):
+    allowed = {'total_positive', 'total_negative', 'total_reviews'}
+    # parameter checkers
+    if metric not in allowed: 
+        metric = 'total_positive'
+        print(f"get_chart_ranked: Hi. {metric} is not on the list of allowed metrics! Using 'total_positive' instead")
+    if not isinstance(limit, int) or limit <= 0:
+        print(f"get_chart_ranked: Hi. {limit} is not a positive integer!")
+        return
+    #name, metric data, and app_id
+    query = f"""
+        SELECT g.name, r.{metric} AS data, g.app_id 
+        FROM Games g
+        JOIN Reviews r ON g.app_id = r.app_id
+        ORDER BY r.{metric} DESC
+        LIMIT {limit};
+    """
+    results = select_query(query)
+    
+    return jsonify({
+        'labels': [r['name'] for r in results],
+        'data': [r['data'] for r in results],
+        'gameids': [r['app_id'] for r in results]
+    })
+
+@app.route('/api/counts/<attribute>/<int:limit>')
+def get_chart_counts(attribute, limit):
+    allowed = {'genre_list', 'tag_list', 'developer', 'publisher'}
+    #parameter checkers
+    if attribute not in allowed:
+        print(f"get_chart_counts: Hi. {attribute} is not on the list of allowed attributes!")
+        return jsonify({'error': f'get_chart_counts: Invalid attribute'}), 400
+    if not isinstance(limit, int) or limit <= 0:
+        print(f"get_chart_ranked: Hi. {limit} is not fa positive integer!")
+        return jsonify({'error': f'get_chart_counts: Limit must be a positive integer'}), 400
+    
+    query = f"SELECT app_id, {attribute} FROM Games WHERE {attribute} IS NOT NULL AND {attribute} != ''"
+    results = select_query(query)
+    counts = {}
+    for row in results:
+        val = row[attribute]
+        app_id = row['app_id']
+        if not val: continue
+        # dictionary
+        if attribute == 'tag_list':
+            try:
+                tags_dict = json.loads(val)
+                for tag in tags_dict.keys():
+                    if tag not in counts:
+                        counts[tag] = []
+                    counts[tag].append(app_id)
+            except Exception:
+                continue
+        # comma seprated lists (genres, developers, publishers)
+        else:
+            items = [item.strip() for item in str(val).split(',') if item.strip()]
+            for item in items:
+                if item not in counts:
+                    counts[item] = []
+                counts[item].append(app_id)
+    
+    # sort the dictionary items by the length of their app_id lists (descending order)
+    sorted_items = sorted(counts.items(), key=lambda x: len(x[1]), reverse=True)[:limit]
+    
+    return jsonify({
+        'labels': [item[0] for item in sorted_items],
+        'data': [len(item[1]) for item in sorted_items], # The count is the length of the list
+        'gameids': [item[1] for item in sorted_items] # Returning the list of gameids 
+    })
+@app.route('/api/homepage_recommendation')
+def get_homepage_recommendation():
+    query = """
+        SELECT g.app_id, g.name 
+        FROM Games g
+        JOIN Reviews r ON g.app_id = r.app_id
+        ORDER BY r.total_positive DESC
+        LIMIT 500;
+    """
+    results = select_query(query)
+    # one random game from the top 500
+    return jsonify(random.choice(results) if results else {})
+
+@app.route('/api/user_data')
+def get_user_data():
+    if "id" not in session:
+        return jsonify({"error": "User not logged in"}), 401
+    steam_id = session["id"]
+
+    #user's raw list of games and playtimes
+    user_info = select_query("SELECT games, playtimes FROM users WHERE steam_id=?", [steam_id])
+    if not user_info:
+        return jsonify({"error": "No user data found"}), 404
+    # print(user_info)
+    user_games = user_info[0]["games"].split(",")
+    user_playtimes = [int(p) for p in user_info[0]["playtimes"].split(",")]
+    # print(user_games)
+    # print(user_playtimes)
+
+    # Create a quick lookup dictionary mapping app_id (as string) to its playtime
+    playtime_dict = dict(zip(user_games, user_playtimes))
+    placeholders = ",".join(["?"] * len(user_games))
+    
+    query = f"""
+        SELECT g.app_id, g.name, g.genre_list, r.total_positive, r.total_negative 
+        FROM games g
+        LEFT JOIN reviews r ON g.app_id = r.app_id
+        WHERE g.app_id IN ({placeholders})
+    """
+
+    game_details = select_query(query, user_games)
+    most_played = []
+    genre_playtime = {}
+    total_pos = 0
+    total_neg = 0
+
+    for row in game_details:
+        app_id_str = str(row["app_id"])
+        if app_id_str not in playtime_dict:
+            continue
+            
+        pt = playtime_dict[app_id_str]
+
+        # most played
+        most_played.append({"name": row["name"], "playtime": pt, "app_id": row["app_id"]})
+
+        # playtime by gewnre
+        if row["genre_list"]:
+            genres = [g.strip() for g in row["genre_list"].split(',') if g.strip()]
+            for genre in genres:
+                if genre not in genre_playtime:
+                    genre_playtime[genre] = 0
+                genre_playtime[genre] += pt
+
+        # reviews
+        if row["total_positive"]: total_pos += row["total_positive"]
+        if row["total_negative"]: total_neg += row["total_negative"]
+
+    # sort most played and genres to get the top 10
+    most_played.sort(key=lambda x: x["playtime"], reverse=True)
+    top_10_games = most_played[:10]
+    
+    top_genres = sorted(genre_playtime.items(), key=lambda x: x[1], reverse=True)[:10]
+
+    return jsonify({
+        "most_played": {
+            "labels": [g["name"] for g in top_10_games],
+            "data": [g["playtime"] for g in top_10_games],
+            "app_ids": [g["app_id"] for g in top_10_games]
+        },
+        "genre_playtime": {
+            "labels": [g[0] for g in top_genres],
+            "data": [g[1] for g in top_genres]
+        },
+        "reviews": {
+            "labels": ["Positive Reviews", "Negative Reviews"],
+            "data": [total_pos, total_neg]
+        }
+    })
+    
 if __name__ == "__main__":
     app.run(debug=True)

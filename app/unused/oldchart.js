@@ -1,3 +1,92 @@
+/*
+  Parses list items separated by commas into label : occurances
+  for languages, genre
+*/
+function parseList(games, key, limit = 10) {
+  if(typeof key !== 'string'){
+    console.log("key needs to be a string!");
+    return;
+  }
+  const items = games.flatMap(g => (g[key] || "")
+    .split(',')
+    .map(i => i.trim())
+    .filter(Boolean)
+    .map(item => ({ item, appid: g.appid })));
+
+  const counts = items.reduce((result, {item, appid}) => {
+    if (!result[item]) result[item] = { count: 0, ids: [] };
+    result[item].count += 1;
+    result[item].ids.push(appid);
+    return result;
+  }, {});
+
+  const sorted = Object.entries(counts).sort((a,b) => b[1].count - a[1].count)
+    .slice(0, limit);
+
+  return {
+    labels: sorted.map(i => i[0]),
+    data: sorted.map(i => i[1].count),
+    gameids: sorted.map(i => i[1].ids)
+  };
+}
+/*
+  Parses dictionary key into key : key count
+  for tags
+*/
+function parseDictKey(games, key, limit) {
+  if(typeof key !== 'string'){
+    console.log("key needs to be a string!");
+    return;
+  }
+  const items = games.flatMap(g => Object.keys(g[key] || {})
+    .map(item => ({ item, appid: g.appid })));
+
+  const counts = items.reduce((result, {item, appid}) => {
+    if (!result[item]) result[item] = { count: 0, ids: [] };
+    result[item].count += 1;
+    result[item].ids.push(appid);
+    return result;
+  }, {});
+
+  const sorted = Object.entries(counts).sort((a,b) => b[1].count - a[1].count)
+    .slice(0, limit);
+
+  return {
+    labels: sorted.map(i => i[0]),
+    data: sorted.map(i => i[1].count),
+    gameids: sorted.map(i => i[1].ids)
+  };
+}
+
+/*
+  Parses direct integer comparisons per game into game : metric
+  ccu, positive, average_forever
+*/
+function parseRanked(games, metric, limit = 10) {
+  if(typeof metric !== 'string'){
+    console.log("metric needs to be a string!");
+    return;
+  }
+  const sorted = [...games]
+    .sort((a, b) => (b[metric] || 0) - (a[metric] || 0)).slice(0, limit);
+  return {
+    labels: sorted.map(g => g.name),
+    data: sorted.map(g => g[metric]),
+    gameids: sorted.map(g => g.appid)
+  };
+}
+
+function renderRankedChart(metric, labelName) {
+  const chartData = parseRanked(gamesArray, metric, 30);
+  const canvasId = 'rankedChart';
+
+  const existingChart = Chart.getChart(canvasId);
+  if (existingChart) {
+    existingChart.destroy();
+  }
+
+  buildChart(canvasId, 'bar', chartData.labels, chartData.data, labelName);
+}
 
 const steamTheme = {
   doughnut: {
@@ -132,61 +221,37 @@ function buildChart(canvasId, type, labels, data, datasetLabel) {
   });
 }
 
+const gamesArray = Object.values(steamData);
 
-async function fetchAndRenderChart(url, canvasId, chartType, labelName) {
-  try {
-    // init and cleanups
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const chartData = await response.json();
-    if (chartData.error) {
-        console.error("Backend error:", chartData.error);
-        return;
-    }
-    const existingChart = Chart.getChart(canvasId);
-    if (existingChart) {
-      existingChart.destroy();
-    }
+const tagData = parseDictKey(gamesArray, 'tags', 10);
+const reviewData = parseRanked(gamesArray, 'positive', 30);
+const languagesData = parseList(gamesArray, 'languages', 10);
 
-    // Pass formatted data to buildChart
-    buildChart(canvasId, chartType, chartData.labels, chartData.data, labelName);
-  } catch (error) {
-    console.error(`Error loading data for ${canvasId}:`, error);
-  }
-}
 
-async function loadRecommendation() {
-  try {
-    const res = await fetch('/api/homepage_recommendation');
-    const randomTopGame = await res.json();
+// console.log(tagData);
+// console.log(reviewData);
+// console.log(languagesData);
 
-    if (randomTopGame && randomTopGame.app_id) {
-      const titleElement = document.getElementById("mostEngagingTitle");
-      titleElement.href = `https://store.steampowered.com/app/${randomTopGame.app_id}/`;
-      titleElement.innerText = `Looking for a game to play? Have you tried ${randomTopGame.name} yet?`;
-
-      const titleImgElement = document.getElementById("mostEngagingImg");
-      titleImgElement.src = `https://steamcdn-a.akamaihd.net/steam/apps/${randomTopGame.app_id}/header.jpg`;
-    }
-  } catch (error) {
-    console.error("Error loading recommendation:", error);
-  }
-}
-
-fetchAndRenderChart('/api/counts/tag_list/10', 'chart2', 'doughnut', 'Top 10 Tags');
-fetchAndRenderChart('/api/counts/genre_list/10', 'chart3', 'doughnut', 'Top 10 Genres');
-fetchAndRenderChart('/api/ranked/total_positive/30', 'rankedChart', 'bar', 'Positive Reviews');
-loadRecommendation();
+buildChart('chart2', 'doughnut', tagData.labels, tagData.data, 'Number of Games containing (User Defined)');
+// buildChart('chart', 'bar', reviewData.labels, reviewData.data, 'Number of Positive Reviews');
+buildChart('chart3', 'doughnut', languagesData.labels, languagesData.data, 'Number of Games Supporting')
 
 const metricSelector = document.getElementById('metricSelector');
-if (metricSelector) {
-  metricSelector.addEventListener('change', (e) => {
-    const selectedMetric = e.target.value;
-    const selectedLabel = e.target.options[e.target.selectedIndex].text
-    fetchAndRenderChart(`/api/ranked/${selectedMetric}/30`, 'rankedChart', 'bar', selectedLabel);
-  });
-}
+renderRankedChart('positive', 'Positive Reviews');
+metricSelector.addEventListener('change', (e) => {
+  const selectedMetric = e.target.value;
+  const selectedLabel = e.target.options[e.target.selectedIndex].text;
 
+  renderRankedChart(selectedMetric, selectedLabel);
+});
 
+// Barebones recommendation system
+const mostEngaging = [...gamesArray].sort((a, b) => b.positive - a.positive).slice(0,500);
+const randomTopGame = mostEngaging[Math.floor(Math.random() * mostEngaging.length)];
+
+const titleElement = document.getElementById("mostEngagingTitle");
+titleElement.href = `https://store.steampowered.com/app/${randomTopGame.appid}/`;
+titleElement.innerText = `Looking for a game to play? Have you tried ${randomTopGame.name} yet?`;
+
+const titleImgElement = document.getElementById("mostEngagingImg");
+titleImgElement.src = `https://steamcdn-a.akamaihd.net/steam/apps/${randomTopGame.appid}/header.jpg`
