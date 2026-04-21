@@ -152,6 +152,6 @@ mustafaA -- 2026-04-21 10:40
 *TODO BEFORE 20:00
     1) Fix front page formatting
     2) Fix trends button, add logout button
-    3) Tell "why" the game is recommended
+    3) Tell "why" the game is recommended -- pull user vector into db from recommendations.py, most similar tags
     4) Add more game recommendations in front screen, fix top of home page formatting
     5) Add introductory blurb for homepage
