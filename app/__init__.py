@@ -119,7 +119,7 @@ def get_chart_counts(attribute, limit):
     if not isinstance(limit, int) or limit <= 0:
         print(f"get_chart_ranked: Hi. {limit} is not fa positive integer!")
         return jsonify({'error': f'get_chart_counts: Limit must be a positive integer'}), 400
-    
+
     query = f"SELECT app_id, {attribute} FROM Games WHERE {attribute} IS NOT NULL AND {attribute} != ''"
     results = select_query(query)
     counts = {}
@@ -144,14 +144,14 @@ def get_chart_counts(attribute, limit):
                 if item not in counts:
                     counts[item] = []
                 counts[item].append(app_id)
-    
+
     # sort the dictionary items by the length of their app_id lists (descending order)
     sorted_items = sorted(counts.items(), key=lambda x: len(x[1]), reverse=True)[:limit]
-    
+
     return jsonify({
         'labels': [item[0] for item in sorted_items],
         'data': [len(item[1]) for item in sorted_items], # The count is the length of the list
-        'gameids': [item[1] for item in sorted_items] # Returning the list of gameids 
+        'gameids': [item[1] for item in sorted_items] # Returning the list of gameids
     })
 @app.route('/api/homepage_recommendation')
 def get_homepage_recommendation():
@@ -184,9 +184,9 @@ def get_user_data():
     # Create a quick lookup dictionary mapping app_id (as string) to its playtime
     playtime_dict = dict(zip(user_games, user_playtimes))
     placeholders = ",".join(["?"] * len(user_games))
-    
+
     query = f"""
-        SELECT g.app_id, g.name, g.genre_list, r.total_positive, r.total_negative 
+        SELECT g.app_id, g.name, g.genre_list, r.total_positive, r.total_negative
         FROM games g
         LEFT JOIN reviews r ON g.app_id = r.app_id
         WHERE g.app_id IN ({placeholders})
@@ -202,7 +202,7 @@ def get_user_data():
         app_id_str = str(row["app_id"])
         if app_id_str not in playtime_dict:
             continue
-            
+
         pt = playtime_dict[app_id_str]
 
         # most played
@@ -215,6 +215,8 @@ def get_user_data():
                 if genre not in genre_playtime:
                     genre_playtime[genre] = 0
                 genre_playtime[genre] += pt
+            for genre in genres:
+                genre_playtime[genre] / 60.0
 
         # reviews
         if row["total_positive"]: total_pos += row["total_positive"]
@@ -223,7 +225,7 @@ def get_user_data():
     # sort most played and genres to get the top 10
     most_played.sort(key=lambda x: x["playtime"], reverse=True)
     top_10_games = most_played[:10]
-    
+
     top_genres = sorted(genre_playtime.items(), key=lambda x: x[1], reverse=True)[:10]
 
     return jsonify({
@@ -241,6 +243,6 @@ def get_user_data():
             "data": [total_pos, total_neg]
         }
     })
-    
+
 if __name__ == "__main__":
     app.run(debug=True)

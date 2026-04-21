@@ -109,6 +109,10 @@ Yu Lu -- 2026-04-20 03:30
     - created ready templates for all chart types
 - Replaced positive review games on front page with drop-down list
 
+mustafaA -- 2026-04-20 11:00
+- Uploaded review data, user data, description data to SQLite tables
+- Fixed get_steam_description
+
 Eviss Wu --2026-04-20 11:00
 - To Do
     - Mustafa
@@ -143,3 +147,11 @@ Reframed parsing from json to sqlite db
     - Rewrote chart creation functions in chart.js to be async
 Added new trends.js to support chart creation on yourtrends.html, and dynamically display user data based on what is fetched through steamapi
 Updated yourtrends.html templates for better chart visuals
+
+mustafaA -- 2026-04-21 10:40
+*TODO BEFORE 20:00
+    1) Fix front page formatting
+    2) Fix trends button, add logout button
+    3) Tell "why" the game is recommended -- pull user vector into db from recommendations.py, most similar tags
+    4) Add more game recommendations in front screen, fix top of home page formatting
+    5) Add introductory blurb for homepage
