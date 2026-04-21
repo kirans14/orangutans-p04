@@ -47,8 +47,8 @@ def get_recs(steam_id, number):
             recs.pop(farthest)
             recs[game] = distance
     print(recs.keys())
+    for rec in recs:
+        print(select_query("SELECT name FROM games WHERE app_id=?", [rec])[0]["name"])
     return recs.keys()
 
-def get_tags():
-    return ["placeholder"]
 

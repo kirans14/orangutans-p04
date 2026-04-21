@@ -131,3 +131,7 @@ Eviss Wu -- 2026-04-20 5:44
 
 Eviss Wu -- 2026-04-20 6:06
 - Added yourtrends.html skeleton
+
+kiranS -- 2026-04-20 21:45
+- Removed description column from games table to reduce api calls -- description will be accessed as needed
+- Passed in list of game names into yourtrends.html from flask for display (links/game info coming later)

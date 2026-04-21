@@ -4,7 +4,7 @@
 import json
 import requests
 import re
-from urllib.request import Request, urlopen
+import urllib
 
 def get_api_key():
     try:

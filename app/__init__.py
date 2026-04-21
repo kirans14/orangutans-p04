@@ -64,7 +64,8 @@ def trends_get():
         else:
             insert_query("users", {"steam_id": steam_id, "games": game_list, "playtimes": playtimes})
     recs = get_recs(steam_id, 10)
-    return render_template("trends.html", recs = recs)
+    rec_list = [str(select_query("SELECT name FROM games WHERE app_id=?", [rec])[0]["name"]) for rec in recs]
+    return render_template("yourtrends.html", rec_list = rec_list)
 
 # trends_post method for deleting id --> pop from session and redirect to /steam_id
 

@@ -120,7 +120,7 @@ def populate_db(path):
             "publisher":   g.get("publisher", ""),
             "is_free":     is_free,
             "price":       price,
-            "description": get_steam_description(app_id),           
+            # "description": get_steam_description(app_id),           
             "genre_list":  genre_list,
             "tag_list":    tags_string,
             "tag_vector":  ",".join(str(value) for value in tag_vector)
@@ -149,8 +149,8 @@ def populate_db(path):
             "review_score":        g.get("name", ""),
             "total_positive":    positive,            
             "total_negative":   negative,
-            "total_review":   total,
-            "current_players":    g.get('ccu', 0)
+            "total_reviews":   total,
+            # "current_players":    g.get('ccu', 0)
         })
     
     return tags

@@ -42,8 +42,11 @@
         Your Trends
       </h2>
       <div class="bg-[var(--steam-bl)] p-6 mt-4 select-none">
-        <a class="text-2xl text-white mb-2 hover:text-[var(--steam-b)] transition" id="mostEngagingTitle" href="/" target="_blank">Thinking of a recommendation...</a>
-        <img src="" onclick="" role="button" id="mostEngagingImg">
+        <!-- <a class="text-2xl text-white mb-2 hover:text-[var(--steam-b)] transition" id="mostEngagingTitle" href="/" target="_blank">Thinking of a recommendation...</a>
+        <img src="" onclick="" role="button" id="mostEngagingImg"> -->
+        {% for game in rec_list %}
+          <div class="text-2xl text-white"> {{ game }}</div>
+        {% endfor %}
       </div>
     </div>
 
@@ -83,7 +86,6 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>const userData = {{ data | tojson }};</script>
   <script src="{{ url_for('static', filename='js/trends.js') }}"></script>
 
 </body>
