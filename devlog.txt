@@ -109,6 +109,10 @@ Yu Lu -- 2026-04-20 03:30
     - created ready templates for all chart types
 - Replaced positive review games on front page with drop-down list
 
+mustafaA -- 2026-04-20 11:00
+- Uploaded review data, user data, description data to SQLite tables
+- Fixed get_steam_description
+
 Eviss Wu --2026-04-20 11:00
 - To Do
     - Mustafa
