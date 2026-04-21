@@ -144,7 +144,7 @@ async function loadUserTrends() {
             return;
         }
         buildChart('mostPlayedChart', 'doughnut', data.genre_playtime.labels, data.genre_playtime.data, 'Playtime (Minutes)');
-        buildChart('playtimeChart', 'bar', data.most_played.labels, data.most_played.data, 'Total Playtime (Minutes)');
+        buildChart('playtimeChart', 'bar', data.most_played.labels, data.most_played.data, 'Total Playtime (Hours)');
         buildChart('reviewChart', 'pie', data.reviews.labels, data.reviews.data, 'Review Count');
 
         const topGamesContainer = document.getElementById('topGamesList');
@@ -163,7 +163,7 @@ async function loadUserTrends() {
           gameImg.src = `https://steamcdn-a.akamaihd.net/steam/apps/${appId}/header.jpg`;
           gameImg.alt = name;
           gameImg.className = "w-32 h-auto rounded shadow-sm object-cover";
-          
+
           const nameSpan = document.createElement('span');
           nameSpan.className = "text-lg text-white";
           nameSpan.textContent = name;
@@ -174,7 +174,7 @@ async function loadUserTrends() {
         }
 
         const topCategoriesContainer = document.getElementById('topCategoriesList');
-        topCategoriesContainer.innerHTML = ''; 
+        topCategoriesContainer.innerHTML = '';
         const limitCategories = Math.min(5, data.genre_playtime.labels.length);
 
         for (let i = 0; i < limitCategories; i++) {
@@ -185,7 +185,7 @@ async function loadUserTrends() {
             tagLink.href = `https://store.steampowered.com/tags/en/${safeTagUrl}/`;
             tagLink.target = "_blank";
             tagLink.className = "flex items-center gap-4 bg-[var(--steam-bg)] px-4 py-2 hover:bg-white hover:text-[var(--steam-bg)] text-white";
-            tagLink.textContent = tagName; 
+            tagLink.textContent = tagName;
             topCategoriesContainer.appendChild(tagLink);
         }
 
