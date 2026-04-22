@@ -285,9 +285,9 @@
       {% for game in rec_list %}
   <div class="mb-6 p-4 rounded-xl bg-[var(--steam-bl)] shadow-md hover:shadow-lg transition">
 
-    <div class="text-2xl font-semibold text-white hover:text-[var(--steam-b)] transition">
+    <a href="https://store.steampowered.com/app/{{ game.app_id }}/" target="_blank" rel="noopener noreferrer" class="block text-2xl font-semibold text-white hover:text-[var(--steam-b)] transition">
       {{ game.name }}
-    </div>
+    </a>
 
     <div class="text-sm text-gray-400 mt-1 leading-relaxed">
       {{ game.description }}
