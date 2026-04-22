@@ -186,7 +186,7 @@ def get_user_data():
     placeholders = ",".join(["?"] * len(user_games))
 
     query = f"""
-        SELECT g.app_id, g.name, g.genre_list, r.total_positive, r.total_negative
+        SELECT g.app_id, g.name, g.genre_list, r.total_positive, r.total_negative, g.tag_list
         FROM games g
         LEFT JOIN reviews r ON g.app_id = r.app_id
         WHERE g.app_id IN ({placeholders})
@@ -195,6 +195,7 @@ def get_user_data():
     game_details = select_query(query, user_games)
     most_played = []
     genre_playtime = {}
+    tag_playtime = {}
     total_pos = 0
     total_neg = 0
 
@@ -217,6 +218,16 @@ def get_user_data():
                 genre_playtime[genre] += pt
             for genre in genres:
                 genre_playtime[genre] / 60.0
+        
+        if row["tag_list"]:
+            try:
+                tags_dict = json.loads(row["tag_list"])
+                for tag in tags_dict.keys():
+                    tag_playtime[tag] = tag_playtime.get(tag, 0) + pt
+                for tag in tags_dict.keys():
+                    tag_playtime[tag] / 60.0
+            except Exception:
+                continue
 
         # reviews
         if row["total_positive"]: total_pos += row["total_positive"]
@@ -227,6 +238,7 @@ def get_user_data():
     top_10_games = most_played[:10]
 
     top_genres = sorted(genre_playtime.items(), key=lambda x: x[1], reverse=True)[:10]
+    top_tags = sorted(tag_playtime.items(), key=lambda x: x[1], reverse=True)[:10]
 
     return jsonify({
         "most_played": {
@@ -241,6 +253,10 @@ def get_user_data():
         "reviews": {
             "labels": ["Positive Reviews", "Negative Reviews"],
             "data": [total_pos, total_neg]
+        },
+        "tag_playtime":{
+            "labels": [t[0] for t in top_tags],
+            "data": [round(t[1], 2) for t in top_tags]
         }
     })
 
