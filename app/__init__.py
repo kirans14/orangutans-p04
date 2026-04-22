@@ -68,8 +68,9 @@ def trends_get():
         session["id"] = steam_id
     recs = get_recs(steam_id, 10)
     rec_list = [str(select_query("SELECT name FROM games WHERE app_id=?", [rec])[0]["name"]) for rec in recs]
-    print(recs)
-    return render_template("yourtrends.html", rec_list = rec_list)
+    tag_list = [recs[rec] for rec in recs]
+    print(tag_list)
+    return render_template("yourtrends.html", rec_list = rec_list, tag_list=tag_list)
 
 @app.get("/logout")
 def logout_get():
