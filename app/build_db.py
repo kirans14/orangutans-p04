@@ -157,4 +157,4 @@ def populate_db(path):
     
 
 create_tables()
-print(populate_db("./static/detaileddata.json"))
+# print(populate_db("./static/detaileddata.json"))
