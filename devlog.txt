@@ -159,3 +159,6 @@ mustafaA -- 2026-04-21 10:40
 kiranS -- 2026-04-21 21:45
 - Extended gets_rec method to pass back top 3 tags matching user's preferences for each game 
 - Misc fixes to flask
+
+kiranS -- 2026-04-21 22:00
+- Added check for valid steam id and flash (unformatted)

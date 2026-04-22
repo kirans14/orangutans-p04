@@ -55,6 +55,14 @@ def trends():
         steam_id = session["id"]
     else:
         steam_id = request.args.get('steam_id')
+        try:
+            games_and_playtime = get_games_and_playtime(steam_id)
+        except Exception:
+            flash("Invalid Steam ID. Please try again.", "error")
+            return redirect(url_for("id_get"))
+        if games_and_playtime is None:
+            flash("Invalid Steam ID. Please try again.", "error")
+            return redirect(url_for("id_get"))
     return render_template('loading.html', steam_id=steam_id)
 
 @app.route('/fetch_data')

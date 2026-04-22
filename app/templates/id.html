@@ -12,6 +12,45 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .flash-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+    .flash-message {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 4px;
+      border-left: 4px solid #c94f4f;
+      font-family: 'Motiva Sans', Arial, sans-serif;
+      font-size: 0.875rem;
+      color: #c6d4df;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      animation: flash-slide-in 0.25s ease-out;
+    }
+    .flash-icon { color: #c94f4f; font-size: 1rem; flex-shrink: 0; }
+    .flash-text { flex: 1; line-height: 1.4; }
+    .flash-close {
+      background: none;
+      border: none;
+      color: #8f98a0;
+      cursor: pointer;
+      font-size: 0.75rem;
+      padding: 0 4px;
+      transition: color 0.15s;
+    }
+    .flash-close:hover { color: #c6d4df; }
+    @keyframes flash-slide-in {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 
 <body class="min-h-screen flex flex-col bg-[var(--steam-bg)]">
@@ -55,7 +94,19 @@
         Note that your account must be public in order for your information to be accessed. 
       </p>
     </div>
-
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for message in messages %}
+            <div class="flash-message">
+              <span class="flash-icon">⚠</span>
+              <span class="flash-text">{{ message }}</span>
+              <button class="flash-close" onclick="this.parentElement.remove()">✕</button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
   </main>
 
   <footer class="mb-12 pr-6 pt-6 text-center text-sm text-gray-500">
