@@ -7,11 +7,12 @@ import re
 import urllib
 
 def get_api_key():
+    api_key = ""
     try:
         with open("keys/api_key.txt", "r") as f:
             api_key = f.read().strip()
     except FileNotFoundError as e:
-        print(e)
+        print("API key not valid")
     return api_key
  
 # returns list containing two lists: one for user's games, and one for playtimes
