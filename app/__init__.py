@@ -73,7 +73,7 @@ def trends_result():
     data = cache.pop(steam_id, None)
     if not data:
         return redirect('/steam_id')
-    return render_template('trends.html', data=data)
+    return render_template('yourtrends.html', data=data)
 
 @app.get("/trends")
 def trends_get():
