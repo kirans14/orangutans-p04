@@ -16,20 +16,26 @@ def get_api_key():
  
 # returns list containing two lists: one for user's games, and one for playtimes
 def get_games_and_playtime(steam_id: str) -> list:
-    response = requests.get(
-        "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/",
-        params={
-            "key": get_api_key(),
-            "steamid": steam_id,
-            "include_appinfo": 1,
-            "include_played_free_games": 1,
-            "format": "json",
-        },
-        timeout=10,
-    )
-    response.raise_for_status()
-    games = response.json()["response"]["games"]
-    return [[g["appid"] for g in games], [g["playtime_forever"] for g in games]]
+    try:
+        response = requests.get(
+            "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/",
+            params={
+                "key": get_api_key(),
+                "steamid": steam_id,
+                "include_appinfo": 1,
+                "include_played_free_games": 1,
+                "format": "json",
+            },
+            timeout=10,
+        )
+        response.raise_for_status()
+        data = response.json().get("response", {})
+        games = data.get("games")
+        if not games:
+            return None
+        return [[g["appid"] for g in games], [g["playtime_forever"] for g in games]]
+    except Exception:
+        return None
 
 # def get_game_playtime(steam_id, app_id):
 #     params = {

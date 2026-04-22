@@ -61,7 +61,8 @@ def trends():
 def fetch_data():
     steam_id = request.args.get('steam_id')
     def run():
-        cache[steam_id] = get_games_and_playtime(steam_id)
+        result = get_games_and_playtime(steam_id)
+        cache[steam_id] = result if result is not None else "error"
     threading.Thread(target=run).start()
     return '', 204
 
@@ -69,8 +70,6 @@ def fetch_data():
 def check_ready():
     steam_id = request.args.get('steam_id')
     return {"ready": steam_id in cache}
-
-@app.route('/trends_result')
 
 @app.route('/trends_result')
 def trends_result():
