@@ -262,11 +262,55 @@
         Your Trends
       </h2>
       <div class="bg-[var(--steam-bl)] p-6 mt-4 select-none">
-        <!-- <a class="text-2xl text-white mb-2 hover:text-[var(--steam-b)] transition" id="mostEngagingTitle" href="/" target="_blank">Thinking of a recommendation...</a>
-        <img src="" onclick="" role="button" id="mostEngagingImg"> -->
-        {% for game in rec_list %}
-          <div class="text-2xl text-white"> {{ game }}</div>
+
+        <!-- {% for game in rec_list %}
+        <div class="mb-6">
+          <div class="text-2xl text-white">
+            {{ game.name }}
+          </div>
+      
+          <div class="text-sm text-gray-300 mb-2">
+            {{ game.description }}
+          </div>
+      
+          <div class="text-sm text-[var(--steam-g)]">
+            Tags most similar to your most played:
+            {% for tag in game.tags %}
+              <span class="mr-2">{{ tag }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %} -->
+
+      {% for game in rec_list %}
+  <div class="mb-6 p-4 rounded-xl bg-[var(--steam-bl)] shadow-md hover:shadow-lg transition">
+
+    <div class="text-2xl font-semibold text-white hover:text-[var(--steam-b)] transition">
+      {{ game.name }}
+    </div>
+
+    <div class="text-sm text-gray-400 mt-1 leading-relaxed">
+      {{ game.description }}
+    </div>
+
+    <div class="mt-3">
+      <div class="text-xs uppercase tracking-wide text-gray-500 mb-1">
+        Tags similar to your playstyle
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        {% for tag in game.tags %}
+          <span class="px-2 py-1 text-xs rounded-full 
+                       bg-[var(--steam-g)]/20 text-[var(--steam-g)] 
+                       hover:bg-[var(--steam-g)] hover:text-black transition">
+            {{ tag }}
+          </span>
         {% endfor %}
+      </div>
+    </div>
+
+  </div>
+{% endfor %}
       </div>
     </div>
 

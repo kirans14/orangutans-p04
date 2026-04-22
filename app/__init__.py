@@ -6,7 +6,7 @@ from flask import Flask, render_template, request, flash, url_for, redirect, ses
 import sqlite3   #enable control of an sqlite database
 import csv       #facilitate CSV I/O
 from db import select_query, insert_query, general_query
-from api import get_games_and_playtime
+from api import get_games_and_playtime, get_steam_description
 from recommendations import get_recs
 import json
 from urllib.request import Request, urlopen
@@ -85,8 +85,28 @@ def trends_result():
         insert_query("users", {"steam_id": steam_id, "games": game_list, "playtimes": playtimes})
     session["id"] = steam_id
     recs = get_recs(steam_id, 10)
-    rec_list = [str(select_query("SELECT name FROM games WHERE app_id=?", [rec])[0]["name"]) for rec in recs]
+    # rec_list = [str(select_query("SELECT name FROM games WHERE app_id=?", [rec])[0]["name"]) for rec in recs]
     tag_list = [recs[rec] for rec in recs]
+    rec_list = []
+
+    for i, app_id in enumerate(recs):
+        name = select_query(
+            "SELECT name FROM games WHERE app_id=?", [app_id]
+        )[0]["name"]
+
+        description = get_steam_description(app_id)
+
+        if "\n\n" in description:
+            description = description.split("\n\n", 1)[1]
+
+        rec_list.append({
+            "name": name,
+            "description": description,
+            "tags": tag_list[i]
+        })
+
+
+    print(tag_list)
     return render_template("yourtrends.html", rec_list=rec_list, tag_list=tag_list)
 
 @app.get("/logout")
