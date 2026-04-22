@@ -19,6 +19,8 @@ import random
 # Create instance of Flask app >>
 app = Flask(__name__)
 app.secret_key = "ABCEDFGHIJKLMNOPQRSTUVWXYZ12345678909876543216767667"
+import threading
+cache = {}
 
 @app.context_processor
 def user_context(): # persistent info made avalible for all html templates
@@ -46,6 +48,32 @@ def id_get():
     if "id" not in session:
         return render_template("id.html")
     return redirect(url_for("trends_get"))
+
+@app.route('/trends')
+def trends():
+    steam_id = request.args.get('steam_id')
+    return render_template('loading.html', steam_id=steam_id)
+
+@app.route('/fetch_data')
+def fetch_data():
+    steam_id = request.args.get('steam_id')
+    def run():
+        cache[steam_id] = get_games_and_playtime(steam_id)
+    threading.Thread(target=run).start()
+    return '', 204
+
+@app.route('/check_ready')
+def check_ready():
+    steam_id = request.args.get('steam_id')
+    return {"ready": steam_id in cache}
+
+@app.route('/trends_result')
+def trends_result():
+    steam_id = request.args.get('steam_id')
+    data = cache.pop(steam_id, None)
+    if not data:
+        return redirect('/steam_id')
+    return render_template('trends.html', data=data)
 
 @app.get("/trends")
 def trends_get():
