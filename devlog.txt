@@ -162,3 +162,7 @@ kiranS -- 2026-04-21 21:45
 
 kiranS -- 2026-04-21 22:00
 - Added check for valid steam id and flash (unformatted)
+
+mustafaA -- 2026-04-21 23:00
+- added description and most similar tags to trends page
+- update design doc with used tables
