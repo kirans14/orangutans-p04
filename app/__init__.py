@@ -68,37 +68,24 @@ def check_ready():
     return {"ready": steam_id in cache}
 
 @app.route('/trends_result')
+
+@app.route('/trends_result')
 def trends_result():
     steam_id = request.args.get('steam_id')
-    data = cache.pop(steam_id, None)
-    if not data:
+    games_and_playtime = cache.pop(steam_id, None)
+    if not games_and_playtime:
         return redirect('/steam_id')
-    return render_template('yourtrends.html', data=data)
-
-@app.get("/trends")
-def trends_get():
-    if "id" in session:
-        steam_id = session["id"]
+    game_list = ",".join([str(game) for game in games_and_playtime[0]])
+    playtimes = ",".join([str(playtime) for playtime in games_and_playtime[1]])
+    if select_query("SELECT * FROM users WHERE steam_id=?", [steam_id]) != []:
+        general_query("UPDATE users SET games=?, playtimes=? WHERE steam_id=?", [game_list, playtimes, steam_id])
     else:
-        steam_id = request.args["steam_id"].strip()
-        games_and_playtime = get_games_and_playtime(steam_id)
-        if games_and_playtime == 0:
-            print("a")
-            return redirect(url_for("steam_id"))
-        game_list = ",".join([str(game) for game in games_and_playtime[0]])
-        playtimes = ",".join([str(playtime) for playtime in games_and_playtime[1]])
-        # print(game_list)
-        # print(playtimes)
-        if select_query("SELECT * FROM users WHERE steam_id=?", [steam_id]) != []:
-            general_query("UPDATE users SET games=?, playtimes=? WHERE steam_id=?", [game_list, playtimes, steam_id])
-        else:
-            insert_query("users", {"steam_id": steam_id, "games": game_list, "playtimes": playtimes})
-        session["id"] = steam_id
+        insert_query("users", {"steam_id": steam_id, "games": game_list, "playtimes": playtimes})
+    session["id"] = steam_id
     recs = get_recs(steam_id, 10)
     rec_list = [str(select_query("SELECT name FROM games WHERE app_id=?", [rec])[0]["name"]) for rec in recs]
     tag_list = [recs[rec] for rec in recs]
-    print(tag_list)
-    return render_template("yourtrends.html", rec_list = rec_list, tag_list=tag_list)
+    return render_template("yourtrends.html", rec_list=rec_list, tag_list=tag_list)
 
 @app.get("/logout")
 def logout_get():
