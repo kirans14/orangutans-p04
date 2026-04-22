@@ -47,11 +47,14 @@ def chart_get():
 def id_get():
     if "id" not in session:
         return render_template("id.html")
-    return redirect(url_for("trends_get"))
+    return redirect(url_for("trends"))
 
 @app.route('/trends')
 def trends():
-    steam_id = request.args.get('steam_id')
+    if "id" in session:
+        steam_id = session["id"]
+    else:
+        steam_id = request.args.get('steam_id')
     return render_template('loading.html', steam_id=steam_id)
 
 @app.route('/fetch_data')
