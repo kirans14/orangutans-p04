@@ -21,11 +21,11 @@ def get_recs(steam_id, number):
         # print(json.loads(select_query("SELECT tag_list FROM games WHERE app_id=?", [games[i]])[0]["tag_list"]).keys())
         game_tags = json.loads(select_query("SELECT tag_list FROM games WHERE app_id=?", [games[i]])[0]["tag_list"]).keys()
         for tag in game_tags:
-            if tag == "Rogue-like":
-                tag = "Roguelike"
-            if tag == "Rogue-lite":
-                tag = "Roguelite"
-            user_vector[tag_list.index(tag.replace("-", " "))] += int(playtimes[i])
+        #     if tag == "Rogue-like":
+        #         tag = "Roguelike"
+        #     if tag == "Rogue-lite":
+        #         tag = "Roguelite"
+            user_vector[tag_list.index(tag)] += int(playtimes[i])
     # case for when norm is zero
     user_norm = math.sqrt(sum(value * value for value in user_vector))
     if user_norm != 0:
@@ -49,6 +49,16 @@ def get_recs(steam_id, number):
     print(recs.keys())
     for rec in recs:
         print(select_query("SELECT name FROM games WHERE app_id=?", [rec])[0]["name"])
-    return recs.keys()
-
+    
+    out={}
+    for rec in recs:
+        tag_list = list(json.loads(select_query("SELECT tag_list FROM games WHERE app_id=?", [rec])[0]["tag_list"]).keys())
+        common_tags = []
+        for i in range(len(tag_list)):
+            if user_vector[i] != 0:
+                common_tags.append(tag_list[i])
+            if len(common_tags) == 3:
+                break
+        out[rec] = common_tags
+    return out
 

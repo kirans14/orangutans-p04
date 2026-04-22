@@ -47,7 +47,6 @@ def id_get():
         return render_template("id.html")
     return redirect(url_for("trends_get"))
 
-# ADD VERIFICATION OF STEAMID
 @app.get("/trends")
 def trends_get():
     if "id" in session:
@@ -69,6 +68,7 @@ def trends_get():
         session["id"] = steam_id
     recs = get_recs(steam_id, 10)
     rec_list = [str(select_query("SELECT name FROM games WHERE app_id=?", [rec])[0]["name"]) for rec in recs]
+    print(recs)
     return render_template("yourtrends.html", rec_list = rec_list)
 
 @app.get("/logout")
