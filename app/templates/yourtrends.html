@@ -283,13 +283,10 @@
       {% endfor %} -->
 
       {% for game in rec_list %}
-  <div class="mb-6 p-4 rounded-xl bg-[var(--steam-bl)] shadow-md hover:shadow-lg transition">
-
-    <a href="https://store.steampowered.com/app/{{ game.app_id }}/" target="_blank" rel="noopener noreferrer" class="block text-2xl font-semibold text-white hover:text-[var(--steam-b)] transition">
-      {{ game.name }}
-    </a>
-
-    <div class="text-sm text-gray-400 mt-1 leading-relaxed">
+    <div class="mb-6 p-4 rounded-xl bg-[var(--steam-bl)] shadow-md hover:shadow-lg transition">
+        {{ game.name }}
+    </div>
+    <div class="text-sm bg-[var(--steam-g)] mt-1 ">
       {{ game.description }}
     </div>
 
