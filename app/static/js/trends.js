@@ -145,6 +145,7 @@ async function loadUserTrends() {
         }
         buildChart('mostPlayedChart', 'doughnut', data.genre_playtime.labels, data.genre_playtime.data, 'Playtime (Hours)');
         buildChart('playtimeChart', 'bar', data.most_played.labels, data.most_played.data, 'Total Playtime (Hours)');
+        buildChart('mostPlayedTagsChart', 'doughnut', data.tag_playtime.labels, data.tag_playtime.data, 'Playtime (Hours)');
 
         const topGamesContainer = document.getElementById('topGamesList');
         const limit = Math.min(5, data.most_played.labels.length);
@@ -174,7 +175,7 @@ async function loadUserTrends() {
 
         const topCategoriesContainer = document.getElementById('topCategoriesList');
         topCategoriesContainer.innerHTML = '';
-        const limitCategories = Math.min(5, data.genre_playtime.labels.length);
+        const limitCategories = Math.min(10, data.genre_playtime.labels.length);
 
         for (let i = 0; i < limitCategories; i++) {
             const tagName = data.genre_playtime.labels[i];
@@ -187,7 +188,21 @@ async function loadUserTrends() {
             tagLink.textContent = tagName;
             topCategoriesContainer.appendChild(tagLink);
         }
+        const topTagsContainer = document.getElementById('topTagsList');
+        topTagsContainer.innerHTML = '';
+        const limitTags = Math.min(10, data.tag_playtime.labels.length);
 
+        for (let i = 0; i < limitTags; i++) {
+            const tagName = data.tag_playtime.labels[i];
+            const safeTagUrl = encodeURIComponent(tagName);
+
+            const tagLink = document.createElement('a');
+            tagLink.href = `https://store.steampowered.com/tags/en/${safeTagUrl}/`;
+            tagLink.target = "_blank";
+            tagLink.className = "flex items-center gap-4 bg-[var(--steam-bg)] px-4 py-2 hover:bg-white hover:text-[var(--steam-bg)] text-white";
+            tagLink.textContent = tagName;
+            topTagsContainer.appendChild(tagLink);
+        }
     } catch (error) {
         console.error("Error loading charts:", error);
     }
