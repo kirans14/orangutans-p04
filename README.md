@@ -29,6 +29,14 @@ We plan to pull data from the Steam API, and use the data to visualize trends in
 >4) Navigate to root of repo `orangutans-p04/` via: [`cd ..`] (2x) to prepare for installation of dependencies
 >5) Install required dependencies using command: [`pip install -r requirements.txt`] then navigate into `app` via [`cd app`] to prepare to launch
 
+### FEATURE SPOTLIGHT
+* checking steam statistics
+* checking your statistics for steam
+* finding game recommendations
+
+### KNOWN BUGS/ISSUES
+* api rate limiting can make the steamid input required more than once.
+* clicking the title of a game brings you to only the steamstore
 
 # Launch Codes:
 - Run command: [`python3 __init__.py`] or [`python __init__.py`]
