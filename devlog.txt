@@ -166,3 +166,14 @@ kiranS -- 2026-04-21 22:00
 mustafaA -- 2026-04-21 23:00
 - added description and most similar tags to trends page
 - update design doc with used tables
+
+```
+NOTABLE DESIGN REVISIONS:
+------------------------------------
+- Slightly altered description to more accurately match final state
+- Altered sitemap to better reflect API and sqlite calls
+- Changed FEF on document from Bootstrap to Tailwind
+- Changed bubble graph to donut graph on component map and added SQL database component
+- Updated DB tables to get rid of some columns and add others
+====================================
+```
