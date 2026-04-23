@@ -39,5 +39,7 @@ We plan to pull data from the Steam API, and use the data to visualize trends in
 * clicking the title of a game brings you to only the steamstore
 
 # Launch Codes:
+- Run command: [`python3 build_db.py`] or [`python bulid_db.py`]
+- If running locally, need to register Steam API key on the official steam website and put it in app/keys/api_key.txt
 - Run command: [`python3 __init__.py`] or [`python __init__.py`]
 > Ensure current terminal PATH is correctly routed to `orangutans-p04/app` if not, route to `app` using command: [`cd (Directory you installed our repo into)/orangutans-p04/app`]
